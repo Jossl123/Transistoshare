@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full w-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col">
+    <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative">
+        <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-2 left-10 z-10"></button>
+        <div id="enter_points" class="flex flex-col justify-center ml-7 h-full">
+        </div>
+        <div id="content" class="absolute h-full w-full">
+            <svg id="svg_joint" class="h-full w-full absolute">
+            </svg>
+        </div>
+        <button onclick="add_output_point()" class="h-full bg-gray-600 focus:outline-none w-2 absolute right-10 z-10"></button>
+        <div id="exit_points" class="absolute flex flex-col justify-center right-7 h-full">
+        </div>
+    </div>
+    <div id="button_block" class="flex inline-flex h-auto bg-gray-800">
+        <button onclick="add_and()" class="m-2 text-white">And</button>
+        <button onclick="add_or()" class="m-2 text-white">Or</button>
+        <button onclick="add_not()" class="m-2 text-white">Not</button>
+        <a href="index.html" class="m-2 text-white ml-auto">Accueuil</a>
+    </div>
+    <script src="computer.js"></script>
+</body>
+
+</html>
