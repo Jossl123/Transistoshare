@@ -1,0 +1,23 @@
+{
+  "name": "github-computer",
+  "version": "1.0.0",
+  "description": "a web site to share transistors road to people",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jossl123/Computer.git"
+  },
+  "author": "Jossl123",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jossl123/Computer/issues"
+  },
+  "homepage": "https://github.com/Jossl123/Computer#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

@@ -163,7 +163,6 @@ function delete_block(block_id) {
     document.getElementById(block_id).parentNode.removeChild(document.getElementById(block_id))
 }
 
-
 function delete_joint(event) {
     var joint_id = event.path[0].id
     document.getElementById(joint_id).parentNode.removeChild(document.getElementById(joint_id))
@@ -439,7 +438,7 @@ function create_block() {
             ${inputs_html}</div>
             <div class='flex flex-col ml-16 absolute w-${8*current_road.outputs.length} justify-center h-full'>
             ${outputs_html}</div>  
-            <p class='absolute inset-5'>${block_name}</p>
+            <p class='absolute flex justify-center items-center h-full w-full'>${block_name}</p>
         </div>\`
         blocks_elements.${block_name}.push(document.getElementById(\`${block_name}\${blocks_elements.${block_name}.length + 1}\`))" 
     class="m-2 text-white">${block_name}</button>`
