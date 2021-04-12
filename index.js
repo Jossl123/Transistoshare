@@ -136,9 +136,13 @@ function element_drag(event) {
 }
 
 function drop(event) {
-    var dm = document.getElementById(element_dragged);
-    dm.style.left = event.clientX - 60 + 'px';
-    dm.style.top = event.clientY - 30 + 'px';
+    if (event.path[0].id == "button_block") {
+        delete_block(element_dragged)
+    } else {
+        var dm = document.getElementById(element_dragged);
+        dm.style.left = event.clientX - 60 + 'px';
+        dm.style.top = event.clientY - 30 + 'px';
+    }
     event.preventDefault();
     update_joint()
     return false;
@@ -149,17 +153,28 @@ function drag_over(event) {
     return false;
 }
 
+function delete_block(block_id) {
+    current_road.joints_arr.forEach(joint => {
+        if (joint != undefined && joint.includes(block_id)) {
+            delete_joint({ path: [{ id: joint }] })
+        }
+    })
+    blocks_elements[block_id.replace(/[^a-zA-Z ]/g, "")].splice(blocks_elements[block_id.replace(/[^a-zA-Z ]/g, "")].indexOf(document.getElementById(block_id), 1))
+    document.getElementById(block_id).parentNode.removeChild(document.getElementById(block_id))
+}
+
 
 function delete_joint(event) {
-    document.getElementById(event.path[0].id).parentNode.removeChild(document.getElementById(event.path[0].id))
-    document.getElementById(event.path[0].id.split("-")[1]).value = 2
-    document.getElementById(event.path[0].id.split("-")[1]).classList.remove('bg-red-600')
-    document.getElementById(event.path[0].id.split("-")[1]).classList.add('bg-white')
-    if (event.path[0].id.split("-")[0].includes("outputenter")) current_road.inputs.splice(current_road.inputs.indexOf(event.path[0].id.split("-")[0]), 1);
-    if (event.path[0].id.split("-")[0].includes("inputexit")) current_road.outputs.splice(current_road.outputs.indexOf(event.path[0].id.split("-")[0]), 1);;
-    if (event.path[0].id.split("-")[1].includes("outputenter")) current_road.inputs.splice(current_road.inputs.indexOf(event.path[0].id.split("-")[1]), 1);;
-    if (event.path[0].id.split("-")[1].includes("inputexit")) current_road.outputs.splice(current_road.outputs.indexOf(event.path[0].id.split("-")[1]), 1);;
-    current_road.joints_arr[current_road.joints_arr.indexOf(event.path[0].id)] = undefined
+    var joint_id = event.path[0].id
+    document.getElementById(joint_id).parentNode.removeChild(document.getElementById(joint_id))
+    document.getElementById(joint_id.split("-")[1]).value = 2
+    document.getElementById(joint_id.split("-")[1]).classList.remove('bg-red-600')
+    document.getElementById(joint_id.split("-")[1]).classList.add('bg-white')
+    if (joint_id.split("-")[0].includes("outputenter")) current_road.inputs.splice(current_road.inputs.indexOf(joint_id.split("-")[0]), 1);
+    if (joint_id.split("-")[0].includes("inputexit")) current_road.outputs.splice(current_road.outputs.indexOf(joint_id.split("-")[0]), 1);;
+    if (joint_id.split("-")[1].includes("outputenter")) current_road.inputs.splice(current_road.inputs.indexOf(joint_id.split("-")[1]), 1);;
+    if (joint_id.split("-")[1].includes("inputexit")) current_road.outputs.splice(current_road.outputs.indexOf(joint_id.split("-")[1]), 1);;
+    current_road.joints_arr[current_road.joints_arr.indexOf(joint_id)] = undefined
 }
 
 setInterval(function() {
