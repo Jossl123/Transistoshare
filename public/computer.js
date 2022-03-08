@@ -25,6 +25,16 @@ var current_road = {
 var inputs_enter_points = 0
 var outputs_exit_points = 0
 
+class Block {
+    constructor(inputs, outputs) {
+        this.inputs = inputs
+        this.outputs = outputs
+    }
+    action() {
+        return
+    }
+}
+
 blocks_class.AND = class AND {
     constructor(input1, input2) {
         this.input1 = input1;
