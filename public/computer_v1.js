@@ -25,16 +25,6 @@ var current_road = {
 var inputs_enter_points = 0
 var outputs_exit_points = 0
 
-class Block {
-    constructor(inputs, outputs) {
-        this.inputs = inputs
-        this.outputs = outputs
-    }
-    action() {
-        return
-    }
-}
-
 blocks_class.AND = class AND {
     constructor(input1, input2) {
         this.input1 = input1;
@@ -273,7 +263,7 @@ function create_joint(event) {
             x2 = pos.left
             y2 = pos.top
                 //si le premier point cliqué est un input 
-                //alors on echange les valuers des deux points
+                //alors on echange les valeurs des deux points
             console.log(current_road.inputs.includes(event.path[0].id))
             if (joint_with.includes("input")) {
                 if (event.path[0].id.includes("outputenter") && !current_road.inputs.includes(event.path[0].id)) current_road.inputs.push(event.path[0].id);
