@@ -12,14 +12,14 @@
 <body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col">
     <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative">
         <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-2 left-10 z-10"></button>
-        <div id="enter_points" class="flex flex-col justify-center ml-7 h-full">
+        <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full">
         </div>
         <div id="content" class="absolute h-full w-full">
             <svg id="svg_joint" class="h-full w-full absolute">
             </svg>
         </div>
         <button onclick="add_output_point()" class="h-full bg-gray-600 focus:outline-none w-2 absolute right-10 z-10"></button>
-        <div id="exit_points" class="absolute flex flex-col justify-center right-7 h-full">
+        <div id="outputs_points" class="absolute flex flex-col justify-center right-7 h-full">
         </div>
     </div>
     <div id="button_block" class="flex inline-flex h-auto bg-gray-800">

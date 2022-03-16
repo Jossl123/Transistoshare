@@ -1,5 +1,5 @@
 function add_input_point() {
-    document.getElementById("enter_points").innerHTML += `
+    document.getElementById("inputs_points").innerHTML += `
     <div id="${current_road.length}" l="1" class="z-20 flex inline-flex items-center">
         <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
         <button onclick="create_link(event)" type="o" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
@@ -9,10 +9,10 @@ function add_input_point() {
 }
 
 function add_output_point() {
-    document.getElementById("exit_points").innerHTML += `
+    document.getElementById("outputs_points").innerHTML += `
     <div class="z-20 flex inline-flex items-center">
-        <button class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
-        <button class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button type="i" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
     </div>`
 }
 
