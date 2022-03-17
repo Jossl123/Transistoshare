@@ -25,6 +25,10 @@ function add_block(block) {
     document.getElementById("content").innerHTML += r
     current_road += block.action.replace(/[0-9]/g, 'K')
 }
+
+function create_block() {
+    add_block(new Block([0, 0, 0], [0], current_road))
+}
 add_input_point()
 add_input_point()
 add_block(AND)
@@ -45,7 +49,6 @@ function drop(event) {
         dm.style.top = event.clientY - 30 + 'px';
     }
     event.preventDefault();
-    update_joint()
     return false;
 }
 
