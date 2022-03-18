@@ -12,5 +12,8 @@ app.get('/', (req, res) => {
 app.get('/computer', (req, res) => {
     res.sendFile(__dirname + '/views/computer.html');
 });
+app.get('/login', (req, res) => {
+    res.sendFile(__dirname + '/views/login.html');
+});
 
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));

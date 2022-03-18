@@ -1,6 +1,7 @@
 var current_road = ""; //chaque charactere aura deux valeurs : son index dans la chaine et le nb de lettre qui sont accrochés derriere lui
 var inputs_nb = 0;
 var linking = false;
+var links = []
 var point_to_link;
 class Block {
     constructor(inputs, outputs, action) {
@@ -77,7 +78,10 @@ function create_link(e) {
                 link(parseInt(e.path[1].id), parseInt(e.path[1].getAttribute("l")), parseInt(point_to_link[1]), parseInt(point_to_link[2]))
             }
         }
-        document.getElementById("svg_joint").innerHTML += `<line onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${point_to_link[3].top}" y1="${point_to_link[3].left}" x2="${0}" y2="${0}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+        var pos1 = point_to_link[3].getBoundingClientRect()
+        var pos2 = e.path[0].getBoundingClientRect()
+        links.push([point_to_link[3], e.path[0]])
+        document.getElementById("svg_joint").innerHTML += `<line onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
         linking = false
         point_to_link = 0
     } else {
@@ -86,7 +90,7 @@ function create_link(e) {
         } else {
             point_to_link = [e.path[0].getAttribute("type"), e.path[1].id, e.path[1].getAttribute("l")]
         }
-        point_to_link.push(e.path[0].getBoundingClientRect())
+        point_to_link.push(e.path[0])
         linking = true
     }
 }
