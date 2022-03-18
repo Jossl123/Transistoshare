@@ -9,28 +9,34 @@ class Block {
         this.outputs = outputs
         this.action = action
     }
-    execute() {
-        var l = []
-        for (let i = 0; i < this.action.length; i++) {
-            if (this.action[i] == "&") {
+}
+
+function execute() {
+    var l = []
+    for (let i = 0; i < this.action.length; i++) {
+        switch (this.action[i]) {
+            case "&":
                 l.push(l.pop() && l.pop())
-            } else if (this.action[i] == "|") {
+                break;
+            case "|":
                 l.push(l.pop() || l.pop())
-            } else if (this.action[i] == "!") {
+                break;
+            case "!":
                 l.push(!l.pop())
-            } else {
+                break;
+            default:
                 l.push(this.inputs[parseInt(this.action[i])])
-            }
+                break;
         }
-        return l.pop()
     }
+    return l.pop()
 }
 TEST = new Block([0, 0, 0], [0], "01&2|!")
 AND = new Block([0, 0], [0], "01&")
 OR = new Block([0, 0], [0], "01|")
 NOT = new Block([0], [0], "0!")
 
-function cutStr(str, debut, fin) { return str.substr(0, debut) + str.substr(fin) }
+function cutStr(str, debut, fin) { return str.substr(0, debut) + str.substr(fin) } //remove a part of a string
 
 function link(i1, n1, i2, iN) { //i1 : index block cliqué; n1 : longueur block cliqué; i2 : index block destination; iN : index de l'input du block
     var index_debut_block = i1 - (n1 - 1) // index debut du block cliqué
@@ -93,4 +99,8 @@ function create_link(e) {
         point_to_link.push(e.path[0])
         linking = true
     }
+}
+
+function link_output(e) {
+    e.path[1].setAttribute("action", current_road)
 }
