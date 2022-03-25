@@ -11,21 +11,17 @@
 
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="h-screen bg-cyan-800 flex justify-center items-center w-full">
-        <form>
+        <form action="/api/login" method="post">
             <div class="bg-white px-10 py-8 rounded-xl w-screen shadow-md max-w-sm">
                 <div class="space-y-4">
                     <h1 class="text-center text-2xl font-semibold text-gray-600">Login</h1>
                     <div>
-                        <label for="email" class="block mb-1 text-gray-600 font-semibold">Username</label>
-                        <input type="text" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
+                        <label for="username" class="block mb-1 text-gray-600 font-semibold">Username</label>
+                        <input name="username" type="text" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
                     </div>
                     <div>
-                        <label for="email" class="block mb-1 text-gray-600 font-semibold">Email</label>
-                        <input type="text" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
-                    </div>
-                    <div>
-                        <label for="email" class="block mb-1 text-gray-600 font-semibold">Password</label>
-                        <input type="text" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
+                        <label for="password" class="block mb-1 text-gray-600 font-semibold">Password</label>
+                        <input name="password" type="password" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
                     </div>
                     <button class="mt-4 w-full bg-gradient-to-tr from-cyan-600 to-cyan-600 text-slate-50 py-2 rounded-md text-lg tracking-wide">Register</button>
                     <div class="mt-4 w-full text-center">

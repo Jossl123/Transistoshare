@@ -11,21 +11,21 @@
 
 <body class="bg-gray-100 font-sans leading-normal tracking-normal">
     <div class="h-screen bg-cyan-800 flex justify-center items-center w-full">
-        <form action="/register" method="post" onsubmit="return verifyForm()">
+        <form id="form" action="/api/register" method="post" onsubmit="return verifyForm()">
             <div class="bg-white px-10 py-8 rounded-xl w-screen shadow-md max-w-sm">
                 <div class="space-y-4">
                     <h1 class="text-center text-2xl font-semibold text-gray-600">Register</h1>
                     <div>
                         <label id="username" for="username" class="block mb-1 text-gray-600 font-semibold">Username</label>
-                        <input name="username" type="text" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
+                        <input minlength="3" name="username" type="text" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" required/>
                     </div>
                     <div>
                         <label for="email" class="block mb-1 text-gray-600 font-semibold">Email</label>
-                        <input name="email" type="email" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
+                        <input minlength="3" name="email" type="email" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" required/>
                     </div>
                     <div>
                         <label for="password" class="block mb-1 text-gray-600 font-semibold">Password</label>
-                        <input name="password" type="password" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" />
+                        <input minlength="3" name="password" type="password" class="bg-indigo-50 px-4 py-2 outline-none rounded-md w-full" required/>
                     </div>
                     <button class="mt-4 w-full bg-gradient-to-tr from-cyan-600 to-cyan-600 text-slate-50 py-2 rounded-md text-lg tracking-wide">Register</button>
                     <div class="mt-4 w-full text-center">
@@ -37,11 +37,32 @@
     </div>
     <script>
         function verifyForm() {
-            if (document.getElementById("username").value == "") {
-                alert("Enter a valid username");
-                return false;
-            };
-            return true
+            var formdata = new FormData(document.getElementById("form"))
+            var formContent = {}
+            formdata.forEach((value, key) => {
+                formContent[key] = value
+            })
+            if (!formContent['email'].match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/))
+                return alert('please enter valid email')
+            else {
+                fetch('/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(formContent)
+                    }).then((response) => {
+                        if (response.success) return response.json()
+                        else throw JSON.stringify(response)
+                    }).then(data => { //request work
+                        console.log(data)
+                    })
+                    .catch(e => { //request error
+                        console.error(e)
+                    })
+            }
+            return false
         }
     </script>
 </body>
