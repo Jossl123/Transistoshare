@@ -1,8 +1,5 @@
-var current_road = ""; //chaque charactere aura deux valeurs : son index dans la chaine et le nb de lettre qui sont accrochés derriere lui
-var inputs_nb = 0;
-var linking = false;
-var links = []
-var point_to_link;
+links = []
+
 class Block {
     constructor(inputs, outputs, action) {
         this.inputs = inputs
@@ -11,10 +8,10 @@ class Block {
     }
 }
 
-function execute() {
+function execute(action) {
     var l = []
-    for (let i = 0; i < this.action.length; i++) {
-        switch (this.action[i]) {
+    for (let i = 0; i < action.length; i++) {
+        switch (action[i]) {
             case "&":
                 l.push(l.pop() && l.pop())
                 break;
@@ -25,7 +22,7 @@ function execute() {
                 l.push(!l.pop())
                 break;
             default:
-                l.push(this.inputs[parseInt(this.action[i])])
+                l.push(document.getElementById(action[i]).getAttribute("value"))
                 break;
         }
     }
@@ -36,71 +33,52 @@ AND = new Block([0, 0], [0], "01&")
 OR = new Block([0, 0], [0], "01|")
 NOT = new Block([0], [0], "0!")
 
-function cutStr(str, debut, fin) { return str.substr(0, debut) + str.substr(fin) } //remove a part of a string
-
-function link(i1, n1, i2, iN) { //i1 : index block cliqué; n1 : longueur block cliqué; i2 : index block destination; iN : index de l'input du block
-    var index_debut_block = i1 - (n1 - 1) // index debut du block cliqué
-    var block = current_road.substr(i1 - n1 + 1, n1) // string contenant le block a relier
-    document.getElementById(`${i1}`).setAttribute("id", "waiting")
-    document.getElementById(`${i2}`).setAttribute("l", parseInt(document.getElementById(`${i2}`).getAttribute("l")) + n1 - 1)
-    current_road = cutStr(current_road, index_debut_block, index_debut_block + n1) // on retire le block cliqué du chemin
-    for (let i = i1; i < current_road.length + block.length; i++) { //on actualise l'id de tous les blocks après celui qui vient d'être retiré du chemin
-        if (document.getElementById(i)) { document.getElementById(i).setAttribute("id", i - n1) }
-    }
-    if (i1 < i2) { i2 -= n1 }
-    var iPlaceBlock = i2 - 1
-    if (current_road[iPlaceBlock] != "K" || iN != 1) { //calculer l'index a laquelle mettre le block
-        for (let i = 0; i < iN; i++) {
-            if (document.getElementById(`${iPlaceBlock}`)) {
-                iPlaceBlock -= document.getElementById(`${iPlaceBlock}`).getAttribute("l");
-            } else if (current_road[iPlaceBlock] == "K") {
-                if (i == iN - 1) {
-                    i++
-                } else { iPlaceBlock-- }
-            } else {
-                i--;
-                iPlaceBlock--;
+function trace_path(input) {
+    path = document.getElementById(input).parentNode.getAttribute("action")
+    console.log(path)
+    outputs = []
+    for (let i = 0; i < document.querySelectorAll(`[id^="${input[0]}_${input[2]}"]`).length; i++) {
+        for (let i = 0; i < links.length; i++) {
+            if (links[i][1] == input) {
+                outputs.push(links[i][0].replace('o', 'i'))
             }
-            if (iPlaceBlock < 0) { return alert("error infinite loop") }
         }
     }
-    current_road = current_road.slice(0, iPlaceBlock) + block + current_road.slice(iPlaceBlock + 1);
-    for (let i = current_road.length + block.length - 1; i >= iPlaceBlock + 1; i--) {
-        if (document.getElementById(i)) { document.getElementById(i).setAttribute("id", i + block.length - 1) }
+    if (outputs.length > 0 && outputs != null) {
+        for (let i = 0; i < outputs.length; i++) {
+            t = trace_path(outputs[i])
+            console.log(path, i, t)
+            path.replace(`${i}`, t)
+            console.log(path)
+        }
     }
-    for (let i = i1; i < i1 + block.length - 1; i++) {
-        if (document.getElementById(`${i}`)) document.getElementById(`${i}`).setAttribute("id", iPlaceBlock + i - i1)
-    }
-    document.getElementById("waiting").setAttribute("id", iPlaceBlock + parseInt(document.getElementById("waiting").getAttribute("l")) - 1)
-    console.log(current_road)
+    return path
 }
+
+function update() {
+    for (let i = 0; i < links.length; i++) {
+        document.getElementById(links[i][0]).getAttribute("value") = execute(document.getElementById(links[i][0]).getAttribute("action"))
+        document.getElementById(links[i][1]).getAttribute("value") = document.getElementById(links[i][0]).getAttribute("value")
+    }
+}
+var linking = false
 
 function create_link(e) {
     if (linking) { //si on a deja selectionné un point
-        if (e.path[0].getAttribute("type") != point_to_link[0]) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
-            if (point_to_link[0] == "o") { //si le premier point était un output
-                link(parseInt(point_to_link[1]), parseInt(point_to_link[2]), parseInt(e.path[1].id), parseInt(e.path[0].getAttribute("iN")))
+        if (e.path[0].getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
+            if (document.getElementById(point_to_link).getAttribute("type") == "o") { //si le premier point était un output
+                links.push([point_to_link, e.path[0].id])
             } else { //si le premier point était un input
-                link(parseInt(e.path[1].id), parseInt(e.path[1].getAttribute("l")), parseInt(point_to_link[1]), parseInt(point_to_link[2]))
+                links.push([e.path[0].id, point_to_link])
             }
+            var pos1 = document.getElementById(point_to_link).getBoundingClientRect()
+            var pos2 = e.path[0].getBoundingClientRect()
+            document.getElementById("svg_joint").innerHTML += `<line onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+            linking = false
+            point_to_link = 0
         }
-        var pos1 = point_to_link[3].getBoundingClientRect()
-        var pos2 = e.path[0].getBoundingClientRect()
-        links.push([point_to_link[3], e.path[0]])
-        document.getElementById("svg_joint").innerHTML += `<line onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
-        linking = false
-        point_to_link = 0
     } else {
-        if (e.path[0].getAttribute('type') == "i") {
-            point_to_link = [e.path[0].getAttribute("type"), e.path[1].id, e.path[0].getAttribute("iN")]
-        } else {
-            point_to_link = [e.path[0].getAttribute("type"), e.path[1].id, e.path[1].getAttribute("l")]
-        }
-        point_to_link.push(e.path[0])
+        point_to_link = e.path[0].getAttribute("id")
         linking = true
     }
-}
-
-function link_output(e) {
-    e.path[1].setAttribute("action", current_road)
 }
