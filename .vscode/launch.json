@@ -12,7 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\server.js",
-            "runtimeExecutable": "C:\\node\\node"
+            //"runtimeExecutable": "C:\\node\\node"
         }
     ]
 }

@@ -79,15 +79,12 @@ function trace_path(input) {
 function update() {
     for (let i = 0; i < links.length; i++) {
         var v = execute(document.getElementById(links[i][0]).parentNode.getAttribute("action"))
-        console.log(v, document.getElementById(links[i][0]).parentNode.getAttribute("action"))
         document.getElementById(links[i][0]).setAttribute("value", v)
         document.getElementById(links[i][1]).setAttribute("value", v)
         if (v == 1) {
-            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).classList.add("bg-red-500")
-            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).classList.remove("bg-white")
+            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).style.stroke = "rgb(200, 0, 0)"
         } else { //remplacer class par les styles cest pour ca
-            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).classList.remove("bg-red-500")
-            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).classList.add("bg-white")
+            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).style.stroke = "rgb(255, 255, 255)"
         }
     }
 }
@@ -119,7 +116,5 @@ function create_link(e) {
 
 function execute_path(id) {
     var t = trace_path(id)
-    console.log(t)
-    console.log(execute(t))
     update()
 }

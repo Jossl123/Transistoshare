@@ -83,7 +83,6 @@ app.post('/api/register', (req, res) => {
             error: error
         })
     }
-
 })
 
 app.post('/api/login', (req, res) => {
