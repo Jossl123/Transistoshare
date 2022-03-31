@@ -1,7 +1,9 @@
 links = [['I_0', '2_i_0']
-,['I_1', '2_i_1']
-,['2_o_0', '1_i_0']
-,['1_o_0', 'O_0']]
+, ['I_1', '2_i_1']
+, ['I_2', '0_i_1']
+, ['2_o_0', '0_i_0']
+, ['0_o_0', '1_i_0']
+, ['1_o_0', 'O_0']]
 
 class Block {
     constructor(inputs, outputs, action) {
@@ -35,6 +37,9 @@ TEST = new Block([0, 0, 0], [0], "01&2|!")
 AND = new Block([0, 0], [0], "01&")
 OR = new Block([0, 0], [0], "01|")
 NOT = new Block([0], [0], "0!")
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
 
 function trace_path(input, km) {
     var linked_elem = ""
@@ -53,10 +58,20 @@ function trace_path(input, km) {
         }
         for (let i = 0; i < outputs.length; i++) {
             var t=trace_path(outputs[i], km+1)
-            path.replace(`${i}`,t)
-            console.log(km, i, path)
+            for (let e = 0; e < t.length; e++) {
+                if ("0123456789".includes(t[e])){
+                    t = t.replaceAt(e, "abcdefghij"["0123456789".indexOf(t[e])])
+                }
+            }
+            path = path.replace(`${i}`,t)
+        }
+        for (let e = 0; e < path.length; e++) {
+            if ("abcdefghij".includes(path[e])){
+                path = path.replaceAt(e, "0123456789"["abcdefghij".indexOf(path[e])])
+            }
         }
     }
+    console.log(path)
     return path
 }
 

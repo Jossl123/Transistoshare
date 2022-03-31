@@ -14,9 +14,10 @@ function add_output_point() {
     document.getElementById("outputs_points").innerHTML += `
     <div action="${output_nb}" class="z-20 flex inline-flex items-center">
         <button id="O_${output_nb}" type="i" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
-        <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button value="0" onclick="trace_path('O_${output_nb}')" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
     </div>`
     output_nb++
+    //update_joint()
 }
 
 function add_block(block) {
@@ -28,6 +29,7 @@ function add_block(block) {
     r += `<p class="absolute" style="left: 1.25rem; top: ${h-0.75}rem; bottom: ${h-0.75}rem">${block.action.replace(/[0-9]/g, '')}</p></div>`
     document.getElementById("content").innerHTML += r
     nb++
+    //update_joint()
 }
 
 function create_block() {
@@ -39,6 +41,7 @@ add_block(AND)
 add_block(NOT)
 add_block(OR)
 add_output_point()
+add_input_point()
 var element_dragged
 
 function element_drag(event) {
