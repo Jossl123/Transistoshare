@@ -86,11 +86,6 @@ app.post('/api/register', (req, res) => {
 
 })
 
-
-
-
-
-
 app.post('/api/login', (req, res) => {
     r = req.body
     try {
