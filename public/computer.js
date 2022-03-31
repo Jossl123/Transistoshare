@@ -1,4 +1,7 @@
-links = []
+links = [['I_0', '2_i_0']
+,['I_1', '2_i_1']
+,['2_o_0', '1_i_0']
+,['1_o_0', 'O_0']]
 
 class Block {
     constructor(inputs, outputs, action) {
@@ -33,23 +36,25 @@ AND = new Block([0, 0], [0], "01&")
 OR = new Block([0, 0], [0], "01|")
 NOT = new Block([0], [0], "0!")
 
-function trace_path(input) {
-    path = document.getElementById(input).parentNode.getAttribute("action")
-    console.log(path)
-    outputs = []
-    for (let i = 0; i < document.querySelectorAll(`[id^="${input[0]}_${input[2]}"]`).length; i++) {
-        for (let i = 0; i < links.length; i++) {
-            if (links[i][1] == input) {
-                outputs.push(links[i][0].replace('o', 'i'))
-            }
+function trace_path(input, km) {
+    var linked_elem = ""
+    for (let i = 0; i < links.length; i++) {
+        if (links[i][1] == input){
+            linked_elem = links[i][0]
+            i = links.length
         }
     }
-    if (outputs.length > 0 && outputs != null) {
+    var path = document.getElementById(linked_elem).parentNode.getAttribute("action")
+    if (linked_elem[0] != "I"){
+        var k=document.querySelectorAll(`[id^="${linked_elem[0]}_i"]`)
+        var outputs = []
+        for (let i = 0; i < k.length; i++) {
+            outputs.push(k[i].id)
+        }
         for (let i = 0; i < outputs.length; i++) {
-            t = trace_path(outputs[i])
-            console.log(path, i, t)
-            path.replace(`${i}`, t)
-            console.log(path)
+            var t=trace_path(outputs[i], km+1)
+            path.replace(`${i}`,t)
+            console.log(km, i, path)
         }
     }
     return path

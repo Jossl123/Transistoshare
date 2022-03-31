@@ -1,21 +1,22 @@
 var nb = 0
-
+var input_nb = 0
+var output_nb = 0
 function add_input_point() {
     document.getElementById("inputs_points").innerHTML += `
-    <div id="${nb}" l="1" name="" action="${nb}" class="z-20 flex inline-flex items-center">
+    <div l="1" name="" action="${input_nb}" class="z-20 flex inline-flex items-center">
         <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
-        <button id="${nb}_O" action="${nb}" onclick="create_link(event)" type="o" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button id="I_${input_nb}" onclick="create_link(event)" type="o" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
     </div>`
-    nb++
+    input_nb++
 }
 
 function add_output_point() {
     document.getElementById("outputs_points").innerHTML += `
-    <div id="${nb}" action="0" class="z-20 flex inline-flex items-center">
-        <button id="${nb}_i" type="i" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
+    <div action="${output_nb}" class="z-20 flex inline-flex items-center">
+        <button id="O_${output_nb}" type="i" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
         <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
     </div>`
-    nb++
+    output_nb++
 }
 
 function add_block(block) {
@@ -37,6 +38,7 @@ add_input_point()
 add_block(AND)
 add_block(NOT)
 add_block(OR)
+add_output_point()
 var element_dragged
 
 function element_drag(event) {
