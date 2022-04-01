@@ -15,8 +15,10 @@ class Block {
     }
 }
 
-function execute(action) {
+function execute(id) {
     var l = []
+    console.log(id)
+    var action = document.getElementById(id).getAttribute("action")
     for (let i = 0; i < action.length; i++) {
         switch (action[i]) {
             case "&":
@@ -29,7 +31,7 @@ function execute(action) {
                 l.push(!l.pop())
                 break;
             default:
-                l.push(parseInt(document.getElementById(`Ic_${action[i]}`).getAttribute("value")))
+                l.push(parseInt(document.getElementById(`${id}_i_${i}`).getAttribute("value")))
                 break;
         }
     }
@@ -78,13 +80,14 @@ function trace_path(input) {
 
 function update() {
     for (let i = 0; i < links.length; i++) {
-        var v = execute(document.getElementById(links[i][0]).parentNode.getAttribute("action"))
+        console.log(document.getElementById(links[i][0]).parentNode)
+        var v = execute(document.getElementById(links[i][0]).parentNode.getAttribute("id"))
         document.getElementById(links[i][0]).setAttribute("value", v)
         document.getElementById(links[i][1]).setAttribute("value", v)
         if (v == 1) {
-            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).style.stroke = "rgb(200, 0, 0)"
+            document.getElementById(`line-${links[i][0]}-${links[i][1]}`).style.stroke = "rgb(200, 0, 0)"
         } else { //remplacer class par les styles cest pour ca
-            document.getElementById(`line_${links[i][0]}_${links[i][1]}`).style.stroke = "rgb(255, 255, 255)"
+            document.getElementById(`line-${links[i][0]}-${links[i][1]}`).style.stroke = "rgb(255, 255, 255)"
         }
     }
 }
@@ -99,10 +102,10 @@ function create_link(e) {
             var pos2 = e.path[0].getBoundingClientRect()
             if (document.getElementById(point_to_link).getAttribute("type") == "o") { //si le premier point était un output
                 links.push([point_to_link, e.path[0].id])
-                document.getElementById("svg_joint").innerHTML += `<line id="line_${point_to_link}_${e.path[0].id}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+                document.getElementById("svg_joint").innerHTML += `<line id="line-${point_to_link}-${e.path[0].id}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
             } else { //si le premier point était un input
                 links.push([e.path[0].id, point_to_link])
-                document.getElementById("svg_joint").innerHTML += `<line id="line_${e.path[0].id}_${point_to_link}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+                document.getElementById("svg_joint").innerHTML += `<line id="line-${e.path[0].id}-${point_to_link}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
             }
             linking = false
             link_nb++
@@ -118,3 +121,8 @@ function execute_path(id) {
     var t = trace_path(id)
     update()
 }
+const interval = setInterval(function() {
+    update()
+}, 1000);
+
+clearInterval(interval);
