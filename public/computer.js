@@ -17,8 +17,8 @@ class Block {
 
 function execute(id) {
     var l = []
-    console.log(id)
     var action = document.getElementById(id).getAttribute("action")
+    var inp = 0
     for (let i = 0; i < action.length; i++) {
         switch (action[i]) {
             case "&":
@@ -31,7 +31,9 @@ function execute(id) {
                 l.push(!l.pop())
                 break;
             default:
-                l.push(parseInt(document.getElementById(`${id}_i_${i}`).getAttribute("value")))
+                console.log(`${id}_i_${i}`)
+                l.push(parseInt(document.getElementById(`${id}_i_${inp}`).getAttribute("value")))
+                inp++
                 break;
         }
     }
@@ -80,7 +82,6 @@ function trace_path(input) {
 
 function update() {
     for (let i = 0; i < links.length; i++) {
-        console.log(document.getElementById(links[i][0]).parentNode)
         var v = execute(document.getElementById(links[i][0]).parentNode.getAttribute("id"))
         document.getElementById(links[i][0]).setAttribute("value", v)
         document.getElementById(links[i][1]).setAttribute("value", v)

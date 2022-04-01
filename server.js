@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-var db = require('better-sqlite3')('Transistoshare.db')
+//var db = require('better-sqlite3')('Transistoshare.db')
 const crypto = require("crypto")
 
 async function hash(password) {
