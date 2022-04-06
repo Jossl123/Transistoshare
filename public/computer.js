@@ -55,7 +55,7 @@ function trace_path(input) {
             i = links.length
         }
     }
-    var path = document.getElementById(linked_elem).parentNode.getAttribute("action")
+    var path = document.getElementById(linked_elem).getAttribute("action")
     if (linked_elem[0] != "I") {
         var k = document.querySelectorAll(`[id^="${linked_elem[0]}_i"]`)
         var outputs = []
@@ -98,7 +98,6 @@ var link_nb = 0
 function create_link(e) {
     if (linking) { //si on a deja selectionné un point
         if (e.path[0].getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
-
             var pos1 = document.getElementById(point_to_link).getBoundingClientRect()
             var pos2 = e.path[0].getBoundingClientRect()
             if (document.getElementById(point_to_link).getAttribute("type") == "o") { //si le premier point était un output
@@ -122,8 +121,7 @@ function execute_path(id) {
     var t = trace_path(id)
     update()
 }
-const interval = setInterval(function() {
+setInterval(function() {
     update()
+    console.log("test")
 }, 1000);
-
-clearInterval(interval);
