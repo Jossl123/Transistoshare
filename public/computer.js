@@ -31,8 +31,7 @@ function execute(id) {
                 l.push(!l.pop())
                 break;
             default:
-                console.log(`${id}_i_${i}`)
-                l.push(parseInt(document.getElementById(`${id}_i_${inp}`).getAttribute("value")))
+                l.push(parseInt(document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`).getAttribute("value")))
                 inp++
                 break;
         }
@@ -82,7 +81,7 @@ function trace_path(input) {
 
 function update() {
     for (let i = 0; i < links.length; i++) {
-        var v = execute(document.getElementById(links[i][0]).parentNode.getAttribute("id"))
+        var v = execute(document.getElementById(links[i][0]).getAttribute("id"))
         document.getElementById(links[i][0]).setAttribute("value", v)
         document.getElementById(links[i][1]).setAttribute("value", v)
         if (v == 1) {
@@ -115,13 +114,12 @@ function create_link(e) {
         point_to_link = e.path[0].getAttribute("id")
         linking = true
     }
+    update()
 }
 
 function execute_path(id) {
-    var t = trace_path(id)
     update()
 }
 setInterval(function() {
     update()
-    console.log("test")
-}, 1000);
+}, 100);
