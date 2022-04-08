@@ -3,22 +3,25 @@ var input_nb = 0
 var output_nb = 0
 
 function add_input_point() {
+    if (input_nb > 9) return alert("You can't have more than 10 inputs")
     document.getElementById("inputs_points").innerHTML += `
     <div id="I_${input_nb}" l="1" name="" action="${input_nb}" class="z-20 flex inline-flex items-center">
         <button id="I_${input_nb}_i_0" value="0" onclick="change_input_value('I_${input_nb}_i_0')" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
         <button id="I_${input_nb}_c" action="${input_nb}" onclick="create_link(event)" type="o" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
     </div>`
     input_nb++
+    update_joint()
 }
 
 function add_output_point() {
+    if (output_nb > 9) return alert("You can't have more than 10 outputs")
     document.getElementById("outputs_points").innerHTML += `
     <div action="${output_nb}" class="z-20 flex inline-flex items-center">
         <button id="O_${output_nb}" action="${output_nb}" type="i" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
         <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
     </div>`
     output_nb++
-    //update_joint()
+    update_joint()
 }
 
 function add_block(outputsActions, name) {
@@ -26,14 +29,10 @@ function add_block(outputsActions, name) {
     var inputNb = 0
     for (let i = 0; i < outputsActions.length; i++) {
         for (var char of outputsActions[i].replace(/\D+/g, "")) {
-            console.log(char, inputNb)
             if (parseInt(char) > inputNb) inputNb = parseInt(char)
-            console.log(char, inputNb)
         }
     }
-    console.log(inputNb)
     inputNb++
-    console.log(inputNb)
     var h = Math.max(inputNb, outputsActions.length)
     var r = `<div id="${nb}" ondrag="element_drag(event)" draggable="true" class="z-30 absolute top-1/2 left-1/2 bg-blue-600 w-20" style="height: ${h*2}rem">`
     for (let i = 0; i < inputNb; i++) r += `<div id="${nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
@@ -43,22 +42,6 @@ function add_block(outputsActions, name) {
     nb++
     //update_joint()
 }
-
-function create_block() {
-    var outputsActions = []
-    for (let i = 0; i < output_nb; i++) {
-        outputsActions.push(trace_path(`O_${i}`))
-    }
-    console.log(outputsActions)
-    add_block(outputsActions, outputsActions[0])
-}
-//add_input_point()
-// add_input_point()
-add_block(["01&"], "AND")
-    // add_block(NOT)
-    // add_block(OR)
-    // add_output_point()
-    // add_input_point()
 var element_dragged
 
 function element_drag(event) {
@@ -96,7 +79,6 @@ function update_joint() {
 function delete_joint(e) {
     var idsep = e.path[0].id.split('-')
     for (let i = 0; i < links.length; i++) {
-        console.log(links[i], [idsep[1], idsep[2]])
         if (JSON.stringify(links[i]) == JSON.stringify([idsep[1], idsep[2]])) {
             links.splice(i, 1)
             break;

@@ -22,7 +22,11 @@ function execute(id) {
     for (let i = 0; i < action.length; i++) {
         switch (action[i]) {
             case "&":
-                l.push(l.pop() && l.pop())
+                var v1 = l.pop()
+                var v2 = l.pop()
+                console.log(l)
+                l.push(v1 && v2)
+                console.log(l)
                 break;
             case "|":
                 l.push(l.pop() || l.pop())
@@ -31,10 +35,12 @@ function execute(id) {
                 l.push(!l.pop())
                 break;
             default:
+                //console.log(document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`).getAttribute("value"), document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`))
                 l.push(parseInt(document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`).getAttribute("value")))
                 inp++
                 break;
         }
+        console.log(l, action)
     }
     return l.pop()
 }
@@ -63,20 +69,32 @@ function trace_path(input) {
         }
         for (let i = 0; i < outputs.length; i++) {
             var t = trace_path(outputs[i])
-            for (let e = 0; e < t.length; e++) {
-                if ("0123456789".includes(t[e])) {
-                    t = t.replaceAt(e, "abcdefghij" ["0123456789".indexOf(t[e])])
-                }
-            }
+                // for (let e = 0; e < t.length; e++) {
+                //     if ("0123456789".includes(t[e])) {
+                //         t = t.replaceAt(e, "abcdefghij" ["0123456789".indexOf(t[e])])
+                //     }
+                // }
+            t = convert(t, "0123456789", "abcdefghij")
             path = path.replace(`${i}`, t)
         }
-        for (let e = 0; e < path.length; e++) {
-            if ("abcdefghij".includes(path[e])) {
-                path = path.replaceAt(e, "0123456789" ["abcdefghij".indexOf(path[e])])
-            }
-        }
+        // for (let e = 0; e < path.length; e++) {
+        //     if ("abcdefghij".includes(path[e])) {
+        //         path = path.replaceAt(e, "0123456789" ["abcdefghij".indexOf(path[e])])
+        //     }
+        // }
+        path = convert(path, "abcdefghij", "0123456789")
     }
     return path
+}
+
+function convert(str, i, o) {
+    var fstr = str
+    for (let e = 0; e < fstr.length; e++) {
+        if (i.includes(fstr[e])) {
+            fstr = fstr.replaceAt(e, o[i.indexOf(fstr[e])])
+        }
+    }
+    return fstr
 }
 
 function update() {
@@ -117,9 +135,17 @@ function create_link(e) {
     update()
 }
 
+function create_block() {
+    var outputsActions = []
+    for (let i = 0; i < output_nb; i++) {
+        outputsActions.push(trace_path(`O_${i}`))
+    }
+    add_block(outputsActions, prompt("Name of the bloc : "))
+}
+
 function execute_path(id) {
     update()
 }
-setInterval(function() {
-    update()
-}, 100);
+// setInterval(function() {
+//     update()
+// }, 100);
