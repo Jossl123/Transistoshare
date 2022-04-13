@@ -42,6 +42,31 @@ function add_block(outputsActions, name) {
     nb++
     //update_joint()
 }
+//add_block(["01|10&!&2|10&!&", "01|10&!&2&10&|"], "Xor")
+add_block(["01|10&!&"], "Xor")
+add_block(["01|10&!&"], "Xor")
+add_block(["01|"], "OR")
+add_block(["01&"], "and")
+add_block(["01&"], "and")
+add_input_point()
+add_input_point()
+add_input_point()
+add_output_point()
+add_output_point()
+links = [
+    ['I_0_c', '1_i_0'],
+    ['I_1_c', '1_i_1'],
+    ['I_1_c', '4_i_0'],
+    ['I_0_c', '4_i_1'],
+    ['1_o_0', '0_i_0'],
+    ['0_o_0', 'O_0'],
+    ['2_o_0', 'O_1'],
+    ['3_o_0', '2_i_0'],
+    ['4_o_0', '2_i_1'],
+    ['I_2_c', '0_i_1'],
+    ['I_2_c', '3_i_1'],
+    ['1_o_0', '3_i_0']
+]
 var element_dragged
 
 function element_drag(event) {

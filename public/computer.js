@@ -1,11 +1,3 @@
-// links = [
-//     ['I_0', '2_i_0'],
-//     ['I_1', '2_i_1'],
-//     ['I_2', '0_i_1'],
-//     ['2_o_0', '0_i_0'],
-//     ['0_o_0', '1_i_0'],
-//     ['1_o_0', 'O_0']
-// ]
 var links = []
 class Block {
     constructor(inputs, outputs, action) {
@@ -18,15 +10,17 @@ class Block {
 function execute(id) {
     var l = []
     var action = document.getElementById(id).getAttribute("action")
-    var inp = 0
+    var minInput = links.length
+    for (var char of action.replace(/\D+/g, "")) {
+        if (parseInt(char) < minInput) minInput = parseInt(char)
+    }
+    var inp = minInput
     for (let i = 0; i < action.length; i++) {
         switch (action[i]) {
             case "&":
                 var v1 = l.pop()
                 var v2 = l.pop()
-                console.log(l)
                 l.push(v1 && v2)
-                console.log(l)
                 break;
             case "|":
                 l.push(l.pop() || l.pop())
@@ -35,24 +29,30 @@ function execute(id) {
                 l.push(!l.pop())
                 break;
             default:
-                //console.log(document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`).getAttribute("value"), document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`))
+                inp = parseInt(action[i]) - minInput
                 l.push(parseInt(document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`).getAttribute("value")))
-                inp++
                 break;
         }
-        console.log(l, action)
     }
-    return l.pop()
+    var finalValue = l.pop()
+    switch (finalValue) {
+        case true:
+            return 1
+        case false:
+            return 0
+        default:
+            return finalValue
+    }
 }
 TEST = new Block([0, 0, 0], [0], "01&2|!")
 AND = new Block([0, 0], [0], "01&")
 OR = new Block([0, 0], [0], "01|")
 NOT = new Block([0], [0], "0!")
 String.prototype.replaceAt = function(index, replacement) {
-    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-}
-
-function trace_path(input) {
+        return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+    }
+    // le probleme est que il retourne les premiers 1 et 0 comme si c'etait des inputs, il oublie de les parcourir
+function trace_path(input, n = 0) {
     var linked_elem = ""
     for (let i = 0; i < links.length; i++) {
         if (links[i][1] == input) {
@@ -67,23 +67,15 @@ function trace_path(input) {
         for (let i = 0; i < k.length; i++) {
             outputs.push(k[i].id)
         }
+        console.log(path, outputs, n)
         for (let i = 0; i < outputs.length; i++) {
-            var t = trace_path(outputs[i])
-                // for (let e = 0; e < t.length; e++) {
-                //     if ("0123456789".includes(t[e])) {
-                //         t = t.replaceAt(e, "abcdefghij" ["0123456789".indexOf(t[e])])
-                //     }
-                // }
+            var t = trace_path(outputs[i], n++)
             t = convert(t, "0123456789", "abcdefghij")
             path = path.replace(`${i}`, t)
         }
-        // for (let e = 0; e < path.length; e++) {
-        //     if ("abcdefghij".includes(path[e])) {
-        //         path = path.replaceAt(e, "0123456789" ["abcdefghij".indexOf(path[e])])
-        //     }
-        // }
         path = convert(path, "abcdefghij", "0123456789")
     }
+    console.log(path)
     return path
 }
 
@@ -146,6 +138,6 @@ function create_block() {
 function execute_path(id) {
     update()
 }
-// setInterval(function() {
-//     update()
-// }, 100);
+setInterval(function() {
+    update()
+}, 100);
