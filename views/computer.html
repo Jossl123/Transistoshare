@@ -11,14 +11,14 @@
 
 <body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col">
     <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative">
-        <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-12 left-0 z-10"></button>
+        <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-2 left-10 z-10"></button>
         <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full">
         </div>
         <div id="content" class="absolute h-full w-full">
             <svg id="svg_joint" class="h-full w-full absolute">
             </svg>
         </div>
-        <button onclick="add_output_point()" class="h-full bg-gray-600 focus:outline-none w-12 absolute right-0 z-10"></button>
+        <button onclick="add_output_point()" class="h-full bg-gray-600 focus:outline-none w-2 absolute right-10 z-10"></button>
         <div id="outputs_points" class="absolute flex flex-col justify-center right-7 h-full">
         </div>
     </div>
@@ -27,6 +27,8 @@
         <button onclick="add_block(['01&'], 'AND')" class="m-2 text-white">And</button>
         <button onclick="add_block(['01|'], 'OR')" class="m-2 text-white">Or</button>
         <button onclick="add_block(['0!'], 'NOT')" class="m-2 text-white">Not</button>
+        <button onclick="add_block(['01|10&!&2|201|10&!&&!&', '01|10&!&2&10&|'], 'ADDER')" class="m-2 text-white">Adder</button>
+        <button onclick="add_block(['01|10&!&2|201|10&!&&!&','01|10&!&2|201|10&!&&!&','26|62&!&37|73&!&8&73&||37|73&!&8&73&|26|62&!&&!&','37|73&!&8|837|73&!&&!&','01|10&!&2&10&|'], '4bitadder')" class="m-2 text-white">4bitad</button>
         <a href="/">Accueil</a>
     </div>
     <script src="./computer.js"></script>

@@ -1,11 +1,4 @@
 var links = []
-class Block {
-    constructor(inputs, outputs, action) {
-        this.inputs = inputs
-        this.outputs = outputs
-        this.action = action
-    }
-}
 
 function execute(id) {
     var l = []
@@ -23,10 +16,13 @@ function execute(id) {
                 l.push(v1 && v2)
                 break;
             case "|":
-                l.push(l.pop() || l.pop())
+                var v1 = l.pop()
+                var v2 = l.pop()
+                l.push(v1 || v2)
                 break;
             case "!":
-                l.push(!l.pop())
+                var v1 = l.pop()
+                l.push(!v1)
                 break;
             default:
                 inp = parseInt(action[i]) - minInput
@@ -37,22 +33,18 @@ function execute(id) {
     var finalValue = l.pop()
     switch (finalValue) {
         case true:
-            return 1
+            return "1"
         case false:
-            return 0
+            return "0"
         default:
             return finalValue
     }
 }
-TEST = new Block([0, 0, 0], [0], "01&2|!")
-AND = new Block([0, 0], [0], "01&")
-OR = new Block([0, 0], [0], "01|")
-NOT = new Block([0], [0], "0!")
 String.prototype.replaceAt = function(index, replacement) {
         return this.substring(0, index) + replacement + this.substring(index + replacement.length);
     }
     // le probleme est que il retourne les premiers 1 et 0 comme si c'etait des inputs, il oublie de les parcourir
-function trace_path(input, n = 0) {
+function trace_path(input, n) {
     var linked_elem = ""
     for (let i = 0; i < links.length; i++) {
         if (links[i][1] == input) {
@@ -60,6 +52,7 @@ function trace_path(input, n = 0) {
             i = links.length
         }
     }
+    console.log(linked_elem)
     var path = document.getElementById(linked_elem).getAttribute("action")
     if (linked_elem[0] != "I") {
         var k = document.querySelectorAll(`[id^="${linked_elem[0]}_i"]`)
@@ -67,15 +60,13 @@ function trace_path(input, n = 0) {
         for (let i = 0; i < k.length; i++) {
             outputs.push(k[i].id)
         }
-        console.log(path, outputs, n)
         for (let i = 0; i < outputs.length; i++) {
-            var t = trace_path(outputs[i], n++)
+            var t = trace_path(outputs[i], n + 1)
             t = convert(t, "0123456789", "abcdefghij")
-            path = path.replace(`${i}`, t)
+            path = path.replaceAll(`${i}`, t)
         }
         path = convert(path, "abcdefghij", "0123456789")
     }
-    console.log(path)
     return path
 }
 
@@ -133,6 +124,7 @@ function create_block() {
         outputsActions.push(trace_path(`O_${i}`))
     }
     add_block(outputsActions, prompt("Name of the bloc : "))
+    document.getElementById("button_block").innerHTML += `<button onclick='add_block(${JSON.stringify(outputsActions)}, "${prompt("Name of the bloc : ")}")' class="m-2 text-white">${prompt("Name of the bloc : ")}</button>`
 }
 
 function execute_path(id) {
