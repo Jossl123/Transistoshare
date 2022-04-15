@@ -51,65 +51,8 @@ function add_block(outputsActions, name) {
 // add_block(["01|10&!&"], "Xor")
 // add_block(["01|"], "OR")
 // add_block(["01&"], "and")
-// add_block(["01&"], "and")
-add_block(["01|10&!&2|201|10&!&&!&", "01|10&!&2&10&|"], "ADDER")
-add_block(["01|10&!&2|201|10&!&&!&", "01|10&!&2&10&|"], "ADDER")
-add_block(["01|10&!&2|201|10&!&&!&", "01|10&!&2&10&|"], "ADDER")
-add_block(["01|10&!&2|201|10&!&&!&", "01|10&!&2&10&|"], "ADDER")
-add_input_point()
-add_input_point()
-add_input_point()
-add_input_point()
-add_input_point()
-add_input_point()
-add_input_point()
-add_input_point()
-add_input_point()
-add_output_point()
-add_output_point()
-add_output_point()
-add_output_point()
-add_output_point()
-    // links = [
-    //     ['I_0_c', '1_i_0'],
-    //     ['I_1_c', '1_i_1'],
-    //     ['I_1_c', '4_i_0'],
-    //     ['I_0_c', '4_i_1'],
-    //     ['1_o_0', '0_i_0'],
-    //     ['0_o_0', 'O_0'],
-    //     ['2_o_0', 'O_1'],
-    //     ['3_o_0', '2_i_0'],
-    //     ['4_o_0', '2_i_1'],
-    //     ['I_2_c', '0_i_1'],
-    //     ['I_2_c', '3_i_1'],
-    //     ['1_o_0', '3_i_0']
-    // ]
-    // links = [
-    //     ['I_0_c', '0_i_0'],
-    //     ['I_1_c', '0_i_1'],
-    //     ['I_2_c', '0_i_2'],
-    //     ['0_o_1', 'O_1'],
-    //     ['0_o_0', 'O_0']
-    //     // ]
-links = [
-    ['I_8_c', '3_i_2'],
-    ['3_o_1', '2_i_2'],
-    ['2_o_1', '0_i_2'],
-    ['0_o_1', '1_i_2'],
-    ['1_o_1', 'O_4'],
-    ['I_7_c', '3_i_1'],
-    ['3_o_0', 'O_3'],
-    ['I_6_c', '2_i_1'],
-    ['2_o_0', 'O_2'],
-    ['I_5_c', '0_i_1'],
-    ['0_o_0', 'O_1'],
-    ['I_4_c', '1_i_1'],
-    ['1_o_0', 'O_0'],
-    ['I_3_c', '3_i_0'],
-    ['I_2_c', '2_i_0'],
-    ['I_1_c', '0_i_0'],
-    ['I_0_c', '1_i_0']
-]
+add_block(["0.1.&"], "and")
+
 var element_dragged
 
 function element_drag(event) {

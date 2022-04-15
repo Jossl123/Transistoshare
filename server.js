@@ -45,7 +45,6 @@ app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/views/register.html');
 });
 
-
 app.post('/api/register', (req, res) => {
     r = req.body
     if (r.username.length < 3) return res.json({ success: false, error: "username invalid" })
