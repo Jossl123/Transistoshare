@@ -1,16 +1,28 @@
 var links = []
+var linking = false
+var link_nb = 0
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
+}
 
-function execute(id) {
-    var l = []
+function executeById(id) {
+    if (id[0] == "I") return document.getElementById(id.slice(0, -1) + "i").getAttribute("value") //retourne la valeur de l'input
+    var parent = document.getElementById(id).parentNode.id
+    var parentInputs = document.querySelectorAll(`[id^="${parent}_i"]`)
+    var inputs = []
+    for (let i = 0; i < parentInputs.length; i++) inputs.push(parentInputs[i].getAttribute("value"))
     var action = document.getElementById(id).getAttribute("action")
-    var minInput = links.length
+    return execute(inputs, action)
+}
+
+function execute(inputs, action) {
+    /** 
+        retourne le résultat de l'execution de l'action (1 ou 0)
+        inputs : tableaux des valeurs des inputs
+        action : chaine de caractère représentant le circuit
+    */
+    var l = []
     action = action.split(".")
-    for (var char of action) {
-        if (!(char.includes("&") || char.includes("!")|| char.includes("|"))){
-            if (parseInt(char) < minInput) minInput = parseInt(char)
-        }
-    }
-    var inp = minInput
     for (let i = 0; i < action.length; i++) {
         switch (action[i]) {
             case "&":
@@ -28,76 +40,78 @@ function execute(id) {
                 l.push(!v1)
                 break;
             default:
-                var el = document.getElementById(id).parentNode.id
-                if (el.includes("I"))inp = parseInt(action[i]) - minInput
-                else {inp = parseInt(action[i]) }
-                l.push(parseInt(document.getElementById(`${document.getElementById(id).parentNode.id}_i_${inp}`).getAttribute("value")))
+                l.push(parseInt(inputs[parseInt(action[i])]))
                 break;
         }
     }
-    var finalValue = l.pop()
-    switch (finalValue) {
-        case true:
-            return "1"
-        case false:
-            return "0"
-        default:
-            return finalValue
-    }
+    return `${Number(l.pop())}`
 }
-String.prototype.replaceAt = function(index, replacement) {
-    return this.substring(0, index) + replacement + this.substring(index + replacement.length);
-}
-    // le probleme est que il retourne les premiers 1 et 0 comme si c'etait des inputs, il oublie de les parcourir
-function trace_path(input, n=0) {
-    var linked_elem = ""
+
+function trace_path(output) {
+    /**
+     retourne le circuit actuel de l'utilisateur en chaine de caractere sous la notation polonaise inversée
+     */
+    var linked_elem = "" // input auquel est relié l'output que l'on souhaite concaténiser
     for (let i = 0; i < links.length; i++) {
-        if (links[i][1] == input) {
+        if (links[i][1] == output) {
             linked_elem = links[i][0]
             i = links.length
         }
     }
-    var path = document.getElementById(linked_elem).getAttribute("action")
-    if (linked_elem[0] != "I") {
-        var k = document.querySelectorAll(`[id^="${linked_elem.split('_')[0]}_i"]`)
-        var outputs = []
-        for (let i = 0; i < k.length; i++) {
-            outputs.push(k[i].id)
+    var path = document.getElementById(linked_elem).getAttribute("action").split('.') //notation du transistor de l'input
+    if (linked_elem[0] != "I") { //si ça n'est pas un input
+        var inputsOfElement = document.querySelectorAll(`[id^="${linked_elem.split('_')[0]}_i"]`)
+        for (let i = 0; i < inputsOfElement.length; i++) {
+            var new_path = convertToN(trace_path(inputsOfElement[i].id))
+            for (let n = 0; n < path.length; n++) {
+                if (path[n] == `${i}`) {
+                    path.splice(n, 1, ...new_path)
+                    n += new_path.length
+                }
+            }
         }
-        for (let i = 0; i < outputs.length; i++) {
-            var t = trace_path(outputs[i], n + 1)
-            t = convert(t, "0123456789", "abcdefghij")
-            path = path.replaceAll(`${i}`, t)
-        }
-        path = convert(path, "abcdefghij", "0123456789")
+        path = unconvertToN(path)
     }
-    return path
+    return path.join(".")
 }
 
-function convert(str, i, o) {
-    var fstr = str
-    for (let e = 0; e < fstr.length; e++) {
-        if (i.includes(fstr[e])) {
-            fstr = fstr.replaceAt(e, o[i.indexOf(fstr[e])])
+function convertToN(str) {
+    var a = str.split('.')
+    for (let i = 0; i < a.length; i++) {
+        if (!isNaN(a[i])) { //si c'est un nombre
+            a[i] = "N" + a[i]
         }
     }
-    return fstr
+    return a
+}
+
+function unconvertToN(a) {
+    for (let i = 0; i < a.length; i++) {
+        if (a[i][0] == "N") { //si c'est un nombre
+            a[i] = a[i].slice(1)
+        }
+    }
+    return a
 }
 
 function update() {
     for (let i = 0; i < links.length; i++) {
-        var v = execute(document.getElementById(links[i][0]).getAttribute("id"))
+        var v = executeById(document.getElementById(links[i][0]).id)
         document.getElementById(links[i][0]).setAttribute("value", v)
         document.getElementById(links[i][1]).setAttribute("value", v)
         if (v == 1) {
-            document.getElementById(`line-${links[i][0]}-${links[i][1]}`).style.stroke = "rgb(200, 0, 0)"
-        } else { //remplacer class par les styles cest pour ca
+            document.getElementById(`line-${links[i][0]}-${links[i][1]}`).style.stroke = "rgb(240, 60, 60)"
+            document.getElementById(links[i][0]).style.backgroundColor = "rgb(240, 60, 60)"
+            document.getElementById(links[i][1]).style.backgroundColor = "rgb(240, 60, 60)"
+            if (links[i][1][0] == "O") document.getElementById(links[i][1] + "_o").style.backgroundColor = "rgb(240, 60, 60)"
+        } else {
             document.getElementById(`line-${links[i][0]}-${links[i][1]}`).style.stroke = "rgb(255, 255, 255)"
+            document.getElementById(links[i][0]).style.backgroundColor = "rgb(255, 255, 255)"
+            document.getElementById(links[i][1]).style.backgroundColor = "rgb(255, 255, 255)"
+            if (links[i][1][0] == "O") document.getElementById(links[i][1] + "_o").style.backgroundColor = "rgb(255, 255, 255)"
         }
     }
 }
-var linking = false
-var link_nb = 0
 
 function create_link(e) {
     if (linking) { //si on a deja selectionné un point
@@ -126,7 +140,7 @@ function create_block() {
     var outputsActions = []
     var outputsConnectedId = []
     for (let i = 0; i < links.length; i++) {
-        if (links[i][1].includes("O_")){
+        if (links[i][1].includes("O_")) {
             outputsConnectedId.push(links[i][1].split("_")[1])
         }
     }
@@ -134,13 +148,10 @@ function create_block() {
     for (let i = 0; i < outputsConnectedId.length; i++) {
         outputsActions.push(trace_path(`O_${outputsConnectedId[i]}`))
     }
-    add_block(outputsActions, prompt("Name of the bloc : "))
-    document.getElementById("button_block").innerHTML += `<button onclick='add_block(${JSON.stringify(outputsActions)}, "${prompt("Name of the bloc : ")}")' class="m-2 text-white">${prompt("Name of the bloc : ")}</button>`
+    var block_name = prompt("Name of the bloc : ")
+    add_transistor(outputsActions, block_name)
+    document.getElementById("button_block").innerHTML += `<button onclick='add_transistor(${JSON.stringify(outputsActions)}, "${block_name}")' class="m-2 text-white">${block_name}</button>`
 }
-
-function execute_path(id) {
+setInterval(function() {
     update()
-}
-// setInterval(function() {
-//     update()
-// }, 100);
+}, 100);

@@ -1,72 +1,65 @@
-var nb = 0
+var transistors_nb = 0
 var input_nb = 0
 var output_nb = 0
+var element_dragged
 
 function add_input_point() {
-    if (input_nb > 9) return alert("You can't have more than 10 inputs")
     document.getElementById("inputs_points").innerHTML += `
     <div id="I_${input_nb}" l="1" name="" action="${input_nb}" class="z-20 flex inline-flex items-center">
-        <button id="I_${input_nb}_i_0" value="0" onclick="change_input_value('I_${input_nb}_i_0')" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
-        <button id="I_${input_nb}_c" action="${input_nb}" onclick="create_link(event)" type="o" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button id="I_${input_nb}_i" value="0" onclick="change_input_value('I_${input_nb}_i')" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button id="I_${input_nb}_o" type="o" action="${input_nb}" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full" style="background-color:rgb(255, 255, 255)"></button>
     </div>`
     input_nb++
     update_joint()
 }
 
 function add_output_point() {
-    if (output_nb > 9) return alert("You can't have more than 10 outputs")
     document.getElementById("outputs_points").innerHTML += `
     <div action="${output_nb}" class="z-20 flex inline-flex items-center">
-        <button id="O_${output_nb}" action="${output_nb}" type="i" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
-        <button value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button id="O_${output_nb}" type="i" action="${output_nb}" onclick="create_link(event)" class="h-4 w-4 z-20 focus:outline-none rounded-full bg-white"></button>
+        <button id="O_${output_nb}_o" value="0" class="h-8 w-8 my-1 z-20 focus:outline-none rounded-full" style="background-color:rgb(255, 255, 255)"></button>
     </div>`
     output_nb++
     update_joint()
 }
 
-function remove(el) {
-    var element = el;
-    element.remove();
+function delete_transistor(el) { //effacer un transistor
+    var id = el.id
+    for (let i = 0; i < links.length; i++) {
+        if (links[i][0].split('_')[0] == id || links[i][1].split('_')[0] == id) {
+            links.splice(i, 1)
+            i--
+        }
+    }
+    el.remove();
+    update_joint()
 }
 
-function add_block(outputsActions, name) {
-    //block.action.replaceAll("&", "").replaceAll("!", "").replaceAll("|", "")
+function add_transistor(outputsActions, name) {
     var inputNb = 0
     for (let i = 0; i < outputsActions.length; i++) {
-        for (var char of outputsActions[i].replace(/\D+/g, "")) {
-            if (parseInt(char) > inputNb) inputNb = parseInt(char)
-        }
+        var n = Math.max.apply(null, outputsActions[i].replaceAll("&", "").replaceAll("!", "").replaceAll("|", "").split('.'));
+        if (n > inputNb) inputNb = n
     }
     inputNb++
     var h = Math.max(inputNb, outputsActions.length)
-    var r = `<div id="${nb}" ondrag="element_drag(event)" ondblclick="remove(this)" draggable="true" class="z-30 absolute top-1/2 left-1/2 bg-blue-600 w-20" style="height: ${h*2}rem">`
-    for (let i = 0; i < inputNb; i++) r += `<div id="${nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
-    for (let i = 0; i < outputsActions.length; i++) r += `<div id="${nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
+    var r = `<div id="${transistors_nb}" ondrag="element_drag(event)" ondblclick="delete_transistor(this)" draggable="true" class="z-30 absolute top-1/2 left-1/2 bg-blue-600 w-20" style="height: ${h*2}rem">`
+    for (let i = 0; i < inputNb; i++) r += `<div id="${transistors_nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
+    for (let i = 0; i < outputsActions.length; i++) r += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
     r += `<p class="absolute" style="left: 1.25rem; top: ${h-0.75}rem; bottom: ${h-0.75}rem">${name}</p></div>`
     document.getElementById("content").innerHTML += r
-    nb++
-    //update_joint()
+    transistors_nb++
+    update_joint()
 }
-//add_block(["01|10&!&"], "Xor")
-// add_block(["01|10&!&"], "Xor")
-// add_block(["01|"], "OR")
-// add_block(["01&"], "and")
-add_block(["0.1.&"], "and")
-
-var element_dragged
 
 function element_drag(event) {
     element_dragged = event.path[0].id
 }
 
 function drop(event) {
-    if (event.path[0].id == "button_block") {
-        delete_block(element_dragged)
-    } else {
-        var dm = document.getElementById(element_dragged);
-        dm.style.left = event.clientX - 60 + 'px';
-        dm.style.top = event.clientY - 30 + 'px';
-    }
+    var dm = document.getElementById(element_dragged);
+    dm.style.left = event.clientX - 60 + 'px';
+    dm.style.top = event.clientY - 30 + 'px';
     update_joint()
     event.preventDefault();
     return false;
@@ -103,11 +96,9 @@ function change_input_value(id) {
     v = document.getElementById(id).getAttribute("value")
     document.getElementById(id).setAttribute("value", Number(!parseInt(v)))
     if (v == 0) {
-        document.getElementById(id).classList.add("bg-red-500")
-        document.getElementById(id).classList.remove("bg-white")
+        document.getElementById(id).style.backgroundColor = "rgb(240, 60, 60)"
     } else {
-        document.getElementById(id).classList.remove("bg-red-500")
-        document.getElementById(id).classList.add("bg-white")
+        document.getElementById(id).style.backgroundColor = "rgb(255, 255, 255)"
     }
 }
 
