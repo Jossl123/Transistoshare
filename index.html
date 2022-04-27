@@ -24,6 +24,7 @@
         </div>
     </div>
     <div id="button_block" class="flex inline-flex h-auto bg-gray-800">
+        <button class="bg-gray-600 m-2 text-white" onclick="alert(`- En bas se trouvent les transistors déjà existants vous pouvez cliquer dessus pour les ajouter.\n - La barre grise à gauche sert a ajouter un input lorsque l’on clique dessus et celle de droite un output.\n- En cliquant sur le gros rond de l’input vous changez sa valeur\n- Pour ajouter un fil il suffit de cliquer sur les deux points que vous souhaitez relier\n- Double cliquez sur un fil ou un transistor pour le supprimer\n- Cliquez sur Create pour fabriquer un transistor a partir de votre circuit`)">How to use it ?</button>
         <button onclick="create_block()" class="m-2 text-white">Create</button>
         <button onclick="add_transistor(['0.1.&'], 'AND')" class="m-2 text-white">AND</button>
         <button onclick="add_transistor(['0.1.|'], 'OR')" class="m-2 text-white">OR</button>
