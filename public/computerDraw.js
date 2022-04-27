@@ -43,13 +43,20 @@ function add_transistor(outputsActions, name) {
     }
     inputNb++
     var h = Math.max(inputNb, outputsActions.length)
-    var r = `<div id="${transistors_nb}" ondrag="element_drag(event)" ondblclick="delete_transistor(this)" draggable="true" class="z-30 absolute top-1/2 left-1/2 bg-blue-600 w-20" style="height: ${h*2}rem">`
+    var r = `<div id="${transistors_nb}" ondrag="element_drag(event)" ondblclick="delete_transistor(this)" draggable="true" class="z-30 absolute top-1/2 left-1/2 inline p-4" style="background-color:${getBackgroundColor(name)};height: ${h*2}rem">`
     for (let i = 0; i < inputNb; i++) r += `<div id="${transistors_nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
     for (let i = 0; i < outputsActions.length; i++) r += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
-    r += `<p class="absolute" style="left: 1.25rem; top: ${h-0.75}rem; bottom: ${h-0.75}rem">${name}</p></div>`
+    r += `<p>${name}</p></div>`
     document.getElementById("content").innerHTML += r
     transistors_nb++
     update_joint()
+}
+
+function getBackgroundColor(stringInput) {
+    let stringUniqueHash = [...stringInput].reduce((acc, char) => {
+        return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+    return `hsl(${stringUniqueHash % 360}, 95%, 35%)`;
 }
 
 function element_drag(event) {
