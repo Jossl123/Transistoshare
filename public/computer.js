@@ -6,6 +6,9 @@ String.prototype.replaceAt = function(index, replacement) {
 }
 
 function executeById(id) {
+    /**
+     execute l'action du transistor a partir de son id
+     */
     if (id[0] == "I") return document.getElementById(id.slice(0, -1) + "i").getAttribute("value") //retourne la valeur de l'input
     var parent = document.getElementById(id).parentNode.id
     var parentInputs = document.querySelectorAll(`[id^="${parent}_i"]`)
@@ -49,7 +52,8 @@ function execute(inputs, action) {
 
 function trace_path(output) {
     /**
-     retourne le circuit actuel de l'utilisateur en chaine de caractere sous la notation polonaise inversée
+     retourne le circuit actuel se terminant output en chaine de caractere sous la notation polonaise inversée
+     output : id du transistor à parcourir
      */
     var linked_elem = "" // input auquel est relié l'output que l'on souhaite concaténiser
     for (let i = 0; i < links.length; i++) {
@@ -76,6 +80,11 @@ function trace_path(output) {
 }
 
 function convertToN(str) {
+    /**
+     permet dans trace_path de différencier les inputs deja parcourus et ceux qui ne l'ont pas été
+     str: string
+     retourne un tableau des éléments de str avec tous les nombres de str en ce nombre avec un "N" devant 
+     */
     var a = str.split('.')
     for (let i = 0; i < a.length; i++) {
         if (!isNaN(a[i])) { //si c'est un nombre
@@ -86,6 +95,11 @@ function convertToN(str) {
 }
 
 function unconvertToN(a) {
+    /**
+     permet dans trace_path de différencier les inputs deja parcourus et ceux qui ne l'ont pas été
+     a: tableau identique a celui en sorti de convertToN
+     retourne un tableau des éléments de str avec tous les élements qui commencent par "N" qui l'ont vu disparaître
+     */
     for (let i = 0; i < a.length; i++) {
         if (a[i][0] == "N") { //si c'est un nombre
             a[i] = a[i].slice(1)
@@ -95,6 +109,9 @@ function unconvertToN(a) {
 }
 
 function update() {
+    /**
+     permet d'actualiser la couleur de des fils et des inputs / outputs
+     */
     for (let i = 0; i < links.length; i++) {
         var v = executeById(document.getElementById(links[i][0]).id)
         document.getElementById(links[i][0]).setAttribute("value", v)
@@ -114,21 +131,31 @@ function update() {
 }
 
 function create_link(e) {
+    /**
+     permet de construire un fil entre deux points
+     */
     if (linking) { //si on a deja selectionné un point
-        if (e.path[0].getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
-            var pos1 = document.getElementById(point_to_link).getBoundingClientRect()
-            var pos2 = e.path[0].getBoundingClientRect()
-            if (document.getElementById(point_to_link).getAttribute("type") == "o") { //si le premier point était un output
-                links.push([point_to_link, e.path[0].id])
-                document.getElementById("svg_joint").innerHTML += `<line id="line-${point_to_link}-${e.path[0].id}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
-            } else { //si le premier point était un input
-                links.push([e.path[0].id, point_to_link])
-                document.getElementById("svg_joint").innerHTML += `<line id="line-${e.path[0].id}-${point_to_link}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+        try {
+            if (e.path[0].getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
+                var pos1 = document.getElementById(point_to_link).getBoundingClientRect()
+                var pos2 = e.path[0].getBoundingClientRect()
+                if (document.getElementById(point_to_link).getAttribute("type") == "o") { //si le premier point était un output
+                    links.push([point_to_link, e.path[0].id])
+                    document.getElementById("svg_joint").innerHTML += `<line id="line-${point_to_link}-${e.path[0].id}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+                } else { //si le premier point était un input
+                    links.push([e.path[0].id, point_to_link])
+                    document.getElementById("svg_joint").innerHTML += `<line id="line-${e.path[0].id}-${point_to_link}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+                }
+                linking = false
+                link_nb++
+                point_to_link = 0
             }
+        } catch (error) {
+            console.log(error)
             linking = false
-            link_nb++
             point_to_link = 0
         }
+
     } else {
         point_to_link = e.path[0].getAttribute("id")
         linking = true
@@ -137,6 +164,9 @@ function create_link(e) {
 }
 
 function create_block() {
+    /**
+     permet de construire un nouveau transistor a partir du circuit actuel de l'utilisateur
+     */
     var outputsActions = []
     var outputsConnectedId = []
     for (let i = 0; i < links.length; i++) {
@@ -152,6 +182,7 @@ function create_block() {
     add_transistor(outputsActions, block_name)
     document.getElementById("button_block").innerHTML += `<button onclick='add_transistor(${JSON.stringify(outputsActions)}, "${block_name}")' class="m-2 text-white">${block_name}</button>`
 }
-setInterval(function() {
+
+setInterval(function() { //horloge qui actualise toutes les 0.1 secondes
     update()
 }, 100);
