@@ -29,6 +29,26 @@ function add_output_point() {
     update_joint()
 }
 
+function add_transistor(outputsActions, name) {
+    /**
+     ajoute un transistor (lorsqu'on clique en bas)
+     */
+    var inputNb = 0
+    for (let i = 0; i < outputsActions.length; i++) {
+        var n = Math.max.apply(null, outputsActions[i].replaceAll("&", "").replaceAll("!", "").replaceAll("|", "").split('.'));
+        if (n > inputNb) inputNb = n
+    }
+    inputNb++
+    var h = Math.max(inputNb, outputsActions.length)
+    var r = `<div id="${transistors_nb}"onMouseOut="this.style.boxShadow='0 0 0 0 rgba(200, 200, 200, .7)'" onMouseOver="this.style.boxShadow='0 0 0 5px rgba(200, 200, 200, .7)'" ondrag="element_drag(event)" ondblclick="delete_transistor(this)" draggable="true" class="z-30 absolute top-1/2 left-1/2 inline px-4" style="background-color:${stringToColor(name)};height: ${h*2}rem">`
+    for (let i = 0; i < inputNb; i++) r += `<div id="${transistors_nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
+    for (let i = 0; i < outputsActions.length; i++) r += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
+    r += `<p>${name}</p></div>`
+    document.getElementById("content").innerHTML += r
+    transistors_nb++
+    update_joint()
+}
+
 function delete_transistor(el) {
     /**
      efface un transistor
@@ -41,26 +61,6 @@ function delete_transistor(el) {
         }
     }
     el.remove();
-    update_joint()
-}
-
-function add_transistor(outputsActions, name) {
-    /**
-     ajoute un transistor (lorsqu'on clique en bas)
-     */
-    var inputNb = 0
-    for (let i = 0; i < outputsActions.length; i++) {
-        var n = Math.max.apply(null, outputsActions[i].replaceAll("&", "").replaceAll("!", "").replaceAll("|", "").split('.'));
-        if (n > inputNb) inputNb = n
-    }
-    inputNb++
-    var h = Math.max(inputNb, outputsActions.length)
-    var r = `<div id="${transistors_nb}" ondrag="element_drag(event)" ondblclick="delete_transistor(this)" draggable="true" class="z-30 absolute top-1/2 left-1/2 inline px-4" style="background-color:${stringToColor(name)};height: ${h*2}rem">`
-    for (let i = 0; i < inputNb; i++) r += `<div id="${transistors_nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
-    for (let i = 0; i < outputsActions.length; i++) r += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
-    r += `<p>${name}</p></div>`
-    document.getElementById("content").innerHTML += r
-    transistors_nb++
     update_joint()
 }
 

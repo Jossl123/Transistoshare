@@ -34,7 +34,6 @@ app.use(express.static(__dirname + '/public/'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
 });
-
 app.get('/computer', (req, res) => {
     res.sendFile(__dirname + '/views/computer.html');
 });
@@ -44,7 +43,6 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/views/register.html');
 });
-
 app.post('/api/register', (req, res) => {
     r = req.body
     if (r.username.length < 3) return res.json({ success: false, error: "username invalid" })
@@ -54,11 +52,13 @@ app.post('/api/register', (req, res) => {
         var user = db.prepare('SELECT * FROM Users WHERE username = ?').get(r.username)
         var email = db.prepare('SELECT * FROM Users WHERE email = ?').get(r.email)
     } catch (error) {
+        console.log(error)
         return res.json({
             success: false,
             error: error
         })
     }
+    console.log(user, email)
     if (user != undefined) { //si il n'y a pas d'utilisateur avec ce nom ni ce mail
         return res.json({
             success: false,
@@ -83,7 +83,6 @@ app.post('/api/register', (req, res) => {
         })
     }
 })
-
 app.post('/api/login', (req, res) => {
     r = req.body
     try {

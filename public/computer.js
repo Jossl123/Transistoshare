@@ -149,14 +149,17 @@ function create_link(e) {
                 linking = false
                 link_nb++
                 point_to_link = 0
+                document.body.style.cursor = "pointer"
             }
         } catch (error) {
             console.log(error)
             linking = false
             point_to_link = 0
+            document.body.style.cursor = "pointer"
         }
 
     } else {
+        document.body.style.cursor = "crosshair"
         point_to_link = e.path[0].getAttribute("id")
         linking = true
     }
