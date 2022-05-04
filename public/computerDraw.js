@@ -32,7 +32,7 @@ var element_dragged
 function init_userTransistor() {
     // permet d'écrire les transistors de l'utilisateur dynamiquement
     for (let i = 0; i < user_transistors.length; i++) {
-        document.getElementById("button_block").innerHTML += `<button onclick='add_transistor(${JSON.stringify(user_transistors[i][0])}, "${user_transistors[i][1]}")' class="m-2 text-white">${user_transistors[i][1]}</button>`
+        document.getElementById("button_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(user_transistors[i][0])}, "${user_transistors[i][1]}")'>${user_transistors[i][1]}</button>`
     }
 }
 init_userTransistor()
@@ -218,7 +218,7 @@ function create_block() {
     }
     var block_name = prompt("Name of the bloc : ")
     add_transistor(outputsActions, block_name)
-    document.getElementById("button_block").innerHTML += `<button onclick='add_transistor(${JSON.stringify(outputsActions)}, "${block_name}")' class="m-2 text-white">${block_name}</button>`
+    document.getElementById("button_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(outputsActions)}, "${block_name}")'>${block_name}</button>`
 }
 //-------------------------------------------------------------------------------------
 // fonctions qui permettent de pouvoir deplacer les transistors
