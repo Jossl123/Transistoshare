@@ -11,9 +11,9 @@
 </head>
 
 <body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col">
-    <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative">
+    <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative transition">
         <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-2 left-10 z-10"></button>
-        <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full">
+        <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full transition-all">
         </div>
         <div id="content" class="absolute h-full w-full">
             <svg id="svg_joint" class="h-full w-full absolute">
@@ -25,6 +25,12 @@
     </div>
     <div id="button_block" class="flex flex-row gap-2 flex-wrap p-2 h-auto bg-gray-800">
         <a href="/" class="px-2 py-1 rounded transition text-white/75 transition bg-blue-600/50 hover:text-white hover:bg-blue-600">Accueil</a>
+
+        <button class="flex items-center gap-1 px-2 py-1 rounded transition text-white/75 transition bg-sky-600/50 hover:text-white hover:bg-sky-600" onclick="alert(`- En bas se trouvent les transistors déjà existants vous pouvez cliquer dessus pour les ajouter.\n - La barre grise à gauche sert a ajouter un input lorsque l’on clique dessus et celle de droite un output.\n- En cliquant sur le gros rond de l’input vous changez sa valeur\n- Pour ajouter un fil il suffit de cliquer sur les deux points que vous souhaitez relier\n- Double cliquez sur un fil ou un transistor pour le supprimer\n- Cliquez sur Create pour fabriquer un transistor a partir de votre circuit`)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Utilisation
+        </button>
+
         <button class="flex items-center gap-1 px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick="create_block()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             CREATE
