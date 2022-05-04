@@ -29,13 +29,14 @@ var input_nb = 0
 var output_nb = 0
 var element_dragged
 
-function init_userTransistor() {
+function init_userTransistors() {
     // permet d'écrire les transistors de l'utilisateur dynamiquement
+    document.getElementById("transistors_block").innerHTML = ""
     for (let i = 0; i < user_transistors.length; i++) {
-        document.getElementById("button_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(user_transistors[i][0])}, "${user_transistors[i][1]}")'>${user_transistors[i][1]}</button>`
+        document.getElementById("transistors_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(user_transistors[i][0])}, "${user_transistors[i][1]}")'>${user_transistors[i][1]}</button>`
     }
 }
-init_userTransistor()
+init_userTransistors()
 
 function add_transistor(outputsActions, name) {
     /**
@@ -165,6 +166,31 @@ function update() {
     }
 }
 
+function create_block() {
+    /**
+     permet de construire un nouveau transistor a partir du circuit actuel de l'utilisateur
+     */
+    var outputsActions = []
+    var outputsConnectedId = []
+    for (let i = 0; i < links.length; i++) {
+        if (links[i][1].includes("O_")) {
+            outputsConnectedId.push(links[i][1].split("_")[1])
+        }
+    }
+    outputsConnectedId.sort((a, b) => a - b);
+    for (let i = 0; i < outputsConnectedId.length; i++) {
+        outputsActions.push(trace_path(`O_${outputsConnectedId[i]}`))
+    }
+    var block_name = prompt("Name of the bloc : ")
+    user_transistors.push([outputsActions, block_name])
+    init_userTransistors()
+    add_transistor(outputsActions, block_name)
+}
+
+//-------------------------------------------------------------------------------------
+// fonctions qui gèrent les fils
+//-------------------------------------------------------------------------------------
+
 function create_link(e) {
     /**
      permet de construire un fil entre deux points
@@ -201,46 +227,6 @@ function create_link(e) {
     update()
 }
 
-function create_block() {
-    /**
-     permet de construire un nouveau transistor a partir du circuit actuel de l'utilisateur
-     */
-    var outputsActions = []
-    var outputsConnectedId = []
-    for (let i = 0; i < links.length; i++) {
-        if (links[i][1].includes("O_")) {
-            outputsConnectedId.push(links[i][1].split("_")[1])
-        }
-    }
-    outputsConnectedId.sort((a, b) => a - b);
-    for (let i = 0; i < outputsConnectedId.length; i++) {
-        outputsActions.push(trace_path(`O_${outputsConnectedId[i]}`))
-    }
-    var block_name = prompt("Name of the bloc : ")
-    add_transistor(outputsActions, block_name)
-    document.getElementById("button_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(outputsActions)}, "${block_name}")'>${block_name}</button>`
-}
-//-------------------------------------------------------------------------------------
-// fonctions qui permettent de pouvoir deplacer les transistors
-//-------------------------------------------------------------------------------------
-function element_drag(event) {
-    element_dragged = event.path[0].id
-}
-
-function drop(event) {
-    var dm = document.getElementById(element_dragged);
-    dm.style.left = event.clientX - 60 + 'px';
-    dm.style.top = event.clientY - 30 + 'px';
-    update_joint()
-    event.preventDefault();
-    return false;
-}
-
-function drag_over(event) {
-    event.preventDefault();
-    return false;
-}
-
 function update_joint() {
     /**
      actualise la position des fils 
@@ -270,3 +256,25 @@ function delete_joint(e) {
 }
 
 window.addEventListener("resize", update_joint) //actualise les fils quand la fenetre est recadrer
+
+//-------------------------------------------------------------------------------------
+// fonctions qui permettent de pouvoir deplacer les transistors
+//-------------------------------------------------------------------------------------
+
+function element_drag(event) {
+    element_dragged = event.path[0].id
+}
+
+function drop(event) {
+    var dm = document.getElementById(element_dragged);
+    dm.style.left = event.clientX - 60 + 'px';
+    dm.style.top = event.clientY - 30 + 'px';
+    update_joint()
+    event.preventDefault();
+    return false;
+}
+
+function drag_over(event) {
+    event.preventDefault();
+    return false;
+}
