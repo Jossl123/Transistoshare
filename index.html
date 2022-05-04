@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full w-full">
+<html lang="en" class="h-full w-full bg-black">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computer</title>
-    <link rel="shortcut icon" href="./public/img/logo.png">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="./img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col">
-    <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative">
+    <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative transition">
         <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-2 left-10 z-10"></button>
-        <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full">
+        <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full transition-all">
         </div>
         <div id="content" class="absolute h-full w-full">
             <svg id="svg_joint" class="h-full w-full absolute">
@@ -23,19 +23,20 @@
         <div id="outputs_points" class="absolute flex flex-col justify-center right-7 h-full">
         </div>
     </div>
-    <div id="button_block" class="flex inline-flex h-auto bg-gray-800">
-        <button class="bg-gray-600 m-2 text-white" onclick="alert(`- En bas se trouvent les transistors déjà existants vous pouvez cliquer dessus pour les ajouter.\n - La barre grise à gauche sert a ajouter un input lorsque l’on clique dessus et celle de droite un output.\n- En cliquant sur le gros rond de l’input vous changez sa valeur\n- Pour ajouter un fil il suffit de cliquer sur les deux points que vous souhaitez relier\n- Double cliquez sur un fil ou un transistor pour le supprimer\n- Cliquez sur Create pour fabriquer un transistor a partir de votre circuit`)">How to use it ?</button>
-        <button onclick="create_block()" class="m-2 text-white">Create</button>
-        <button onclick="add_transistor(['0.1.&'], 'AND')" class="m-2 text-white">AND</button>
-        <button onclick="add_transistor(['0.1.|'], 'OR')" class="m-2 text-white">OR</button>
-        <button onclick="add_transistor(['0.!'], 'NOT')" class="m-2 text-white">NOT</button>
-        <button onclick="add_transistor(['0.1.&.!'], 'NAND')" class="m-2 text-white">NAND</button>
-        <button onclick="add_transistor(['0.1.|.1.0.&.!.&'], 'XOR')" class="m-2 text-white">XOR</button>
-        <button onclick="add_transistor(['0.1.|.1.0.&.!.&.2.|.2.0.1.|.1.0.&.!.&.&.!.&','0.1.|.1.0.&.!.&.2.&.1.0.&.|'], 'ADDER')" class="m-2 text-white">ADDER</button>
-        <button onclick="add_transistor(['0.4.|.4.0.&.!.&.1.5.|.5.1.&.!.&.2.6.|.6.2.&.!.&.3.7.|.7.3.&.!.&.8.&.7.3.&.|.&.6.2.&.|.&.5.1.&.|.|.1.5.|.5.1.&.!.&.2.6.|.6.2.&.!.&.3.7.|.7.3.&.!.&.8.&.7.3.&.|.&.6.2.&.|.&.5.1.&.|.0.4.|.4.0.&.!.&.&.!.&','1.5.|.5.1.&.!.&.2.6.|.6.2.&.!.&.3.7.|.7.3.&.!.&.8.&.7.3.&.|.&.6.2.&.|.|.2.6.|.6.2.&.!.&.3.7.|.7.3.&.!.&.8.&.7.3.&.|.&.6.2.&.|.1.5.|.5.1.&.!.&.&.!.&','2.6.|.6.2.&.!.&.3.7.|.7.3.&.!.&.8.&.7.3.&.|.|.3.7.|.7.3.&.!.&.8.&.7.3.&.|.2.6.|.6.2.&.!.&.&.!.&','3.7.|.7.3.&.!.&.8.|.8.3.7.|.7.3.&.!.&.&.!.&','0.4.|.4.0.&.!.&.1.5.|.5.1.&.!.&.2.6.|.6.2.&.!.&.3.7.|.7.3.&.!.&.8.&.7.3.&.|.&.6.2.&.|.&.5.1.&.|.&.4.0.&.|'], '4bitAdder')"
-            class="m-2 text-white">4bitAdder</button>
-        <button onclick="add_transistor(['0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.&.!.&','1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.&.!.&','2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.|.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.&.!.&','3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.|.8.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.&.!.&','0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.&.4.8.|.8.4.&.!.&.0.&.|','0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.&.!.&','0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.&.!.&.!.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.&.!.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.|.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.&.!.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.|.8.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.&.!.&.!.&'], 'ALU')"
-            class="m-2 text-white">ALU</button>
+    <div id="button_block" class="flex flex-row gap-2 flex-wrap p-2 h-auto bg-gray-800">
+        <a href="/" class="px-2 py-1 rounded transition text-white/75 transition bg-blue-600/50 hover:text-white hover:bg-blue-600">Accueil</a>
+
+        <button class="flex items-center gap-1 px-2 py-1 rounded transition text-white/75 transition bg-sky-600/50 hover:text-white hover:bg-sky-600" onclick="alert(`- En bas se trouvent les transistors déjà existants vous pouvez cliquer dessus pour les ajouter.\n - La barre grise à gauche sert a ajouter un input lorsque l’on clique dessus et celle de droite un output.\n- En cliquant sur le gros rond de l’input vous changez sa valeur\n- Pour ajouter un fil il suffit de cliquer sur les deux points que vous souhaitez relier\n- Double cliquez sur un fil ou un transistor pour le supprimer\n- Cliquez sur Create pour fabriquer un transistor a partir de votre circuit`)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            Utilisation
+        </button>
+
+        <button class="flex items-center gap-1 px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick="create_block()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            CREATE
+        </button>
+        <div class="h-full w-0.5 bg-white/25"></div>
+        <div id="transistors_block"></div>
     </div>
     <script src="./computer.js"></script>
     <script src="./computerDraw.js"></script>
