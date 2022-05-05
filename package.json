@@ -1,5 +1,5 @@
 {
-    "name": "github-computer",
+    "name": "transistoshare",
     "version": "1.0.0",
     "description": "a web site to share transistors road to people",
     "main": "server.js",
@@ -9,14 +9,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Jossl123/Computer.git"
+        "url": "git+https://github.com/Jossl123/Transistoshare.git"
     },
     "author": "Jossl123",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/Jossl123/Computer/issues"
+        "url": "https://github.com/Jossl123/Transistoshare/issues"
     },
-    "homepage": "https://github.com/Jossl123/Computer#readme",
+    "homepage": "https://github.com/Jossl123/Transistoshare#readme",
     "dependencies": {
         "better-sqlite3": "^7.5.1",
         "express": "^4.18.0"

@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col">
+<body ondragover="drag_over(event)" ondrop="drop(event)" class="h-full w-full flex flex-grow flex-col overflow-hidden">
     <div class="bg-gray-800 w-full border-gray-900 border-8 flex-grow inline-flex relative transition">
         <button onclick="add_input_point()" class="absolute h-full bg-gray-600 focus:outline-none w-2 left-10 z-10"></button>
         <div id="inputs_points" class="flex flex-col justify-center ml-7 h-full transition-all">
