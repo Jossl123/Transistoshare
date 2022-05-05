@@ -50,6 +50,7 @@ function add_transistor(outputsActions, name) {
         onMouseOut: "this.style.boxShadow='0 0 0 5px rgba(200, 200, 200, 0)'",
         onMouseOver: "this.style.boxShadow='0 0 0 5px rgba(200, 200, 200, .25)'",
         ondrag: "element_drag(event)",
+        ondragstart: "element_drag_ghost(event)",
         ondblclick: "delete_transistor(this)",
         draggable: true,
         class: "rounded z-30 absolute top-1/2 left-1/2 inline px-4 transition-opacity transition-transform duration-200 scale-90 opacity-0",
@@ -249,7 +250,7 @@ function delete_joint(e) {
     update()
 }
 
-window.addEventListener("resize", update_joint) //actualise les fils quand la fenetre est recadrer
+window.addEventListener("resize", update_joint) // actualise les fils quand la fenetre est recadrée
 
 //-------------------------------------------------------------------------------------
 // fonctions qui permettent de pouvoir deplacer les transistors
@@ -257,18 +258,24 @@ window.addEventListener("resize", update_joint) //actualise les fils quand la fe
 
 function element_drag(event) {
     element_dragged = event.path[0].id
+
+    drop(event)
+}
+
+function element_drag_ghost(event) {
+    event.dataTransfer.setDragImage(document.createElement('img'), 0, 0)
 }
 
 function drop(event) {
-    var dm = document.getElementById(element_dragged);
-    dm.style.left = event.clientX - 60 + 'px';
-    dm.style.top = event.clientY - 30 + 'px';
+    var dm = document.getElementById(element_dragged)
+    dm.style.left = event.clientX - 60 + 'px'
+    dm.style.top = event.clientY - 30 + 'px'
     update_joint()
-    event.preventDefault();
-    return false;
+    event.preventDefault()
+    return false
 }
 
 function drag_over(event) {
-    event.preventDefault();
-    return false;
+    event.preventDefault()
+    return false
 }
