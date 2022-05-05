@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-//var db = require('better-sqlite3')('Transistoshare.db')
+var db = require('better-sqlite3')('Transistoshare.db')
 const crypto = require("crypto")
 
-async function hash(password) {
-    return new Promise((resolve, reject) => {
+function hash(password) {
+    return new Promise(async(resolve, reject) => {
         // generate random 16 bytes long salt
         const salt = crypto.randomBytes(16).toString("hex")
 
@@ -16,8 +16,9 @@ async function hash(password) {
         });
     })
 }
-async function verify(password, hash) {
-    return new Promise((resolve, reject) => {
+
+function verify(password, hash) {
+    return new Promise(async(resolve, reject) => {
         const [salt, key] = hash.split(":")
         crypto.scrypt(password, salt, 64, (err, derivedKey) => {
             if (err) reject(err);
@@ -43,7 +44,7 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/views/register.html');
 });
-app.post('/api/register', (req, res) => {
+app.post('/api/register', async(req, res) => {
     r = req.body
     if (r.username.length < 3) return res.json({ success: false, error: "username invalid" })
     if (r.email.length < 3 || !r.email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) return res.json({ success: false, error: "email invalid" })
@@ -52,27 +53,27 @@ app.post('/api/register', (req, res) => {
         var user = db.prepare('SELECT * FROM Users WHERE username = ?').get(r.username)
         var email = db.prepare('SELECT * FROM Users WHERE email = ?').get(r.email)
     } catch (error) {
-        console.log(error)
         return res.json({
             success: false,
             error: error
         })
     }
-    console.log(user, email)
-    if (user != undefined) { //si il n'y a pas d'utilisateur avec ce nom ni ce mail
+    //vérifie qu'il n'y ait pas déjâ un utilisateur avec ce nom ou cet email
+    if (user != undefined) {
         return res.json({
             success: false,
             error: "username used"
         })
     }
-    if (email != undefined) { //si il n'y a pas d'utilisateur avec ce nom ni ce mail
+    if (email != undefined) {
         return res.json({
             success: false,
             error: "email used"
         })
     }
+    //
     try {
-        db.prepare('INSERT INTO Users (username, email, password) VALUES (?, ?, ?)').run(r.username, r.email, r.password)
+        db.prepare('INSERT INTO Users (username, email, password) VALUES (?, ?, ?)').run(r.username, r.email, await hash(r.password))
         return res.json({
             success: true
         })
@@ -83,14 +84,15 @@ app.post('/api/register', (req, res) => {
         })
     }
 })
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async(req, res) => {
     r = req.body
     try {
         var row = db.prepare('SELECT * FROM Users WHERE username = ?').get(r.username)
     } catch (e) {
         console.log(e)
     }
-    if (row.password == r.password) return res.redirect('/')
+    if (row == undefined) return res.redirect('/login')
+    if (await verify(r.password, row.password)) return res.redirect('/')
     else return res.redirect('/login')
 })
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));

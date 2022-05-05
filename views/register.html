@@ -54,7 +54,7 @@
                         },
                         body: JSON.stringify(formContent)
                     }).then((response) => {
-                        if (response.success) return response.json()
+                        if (response.ok) return response.json()
                         else throw JSON.stringify(response)
                     }).then(data => { //request work
                         console.log(data)
