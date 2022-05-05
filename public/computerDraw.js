@@ -274,8 +274,13 @@ function element_drag_ghost(event) {
 
 function drop(event) {
     var dm = document.getElementById(element_dragged)
-    dm.style.left = event.clientX - 60 + 'px'
-    dm.style.top = event.clientY - 30 + 'px'
+    console.log(event.clientX)
+    
+    if (event.clientX != 0 || event.clientY != 0) {
+        dm.style.left = event.clientX - 60 + 'px'
+        dm.style.top = event.clientY - 30 + 'px'
+    }
+
     update_joint()
     event.preventDefault()
     return false
