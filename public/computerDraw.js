@@ -182,7 +182,12 @@ function create_block() {
     for (let i = 0; i < outputsConnectedId.length; i++) {
         outputsActions.push(trace_path(`O_${outputsConnectedId[i]}`))
     }
-    var block_name = prompt("Name of the bloc : ")
+
+    var block_name = ""
+    while (block_name.trim() == "") {
+        block_name = prompt("Name of the block")
+    }
+
     user_transistors.push([outputsActions, block_name])
     init_userTransistors()
     add_transistor(outputsActions, block_name)
