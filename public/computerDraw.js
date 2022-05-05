@@ -274,7 +274,6 @@ function element_drag_ghost(event) {
 
 function drop(event) {
     var dm = document.getElementById(element_dragged)
-    console.log(event.clientX)
     
     if (event.clientX != 0 || event.clientY != 0) {
         dm.style.left = event.clientX - 60 + 'px'
