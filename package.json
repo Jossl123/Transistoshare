@@ -1,7 +1,7 @@
 {
     "name": "transistoshare",
     "version": "1.0.0",
-    "description": "a web site to share transistors road to people",
+    "description": "A website to edit and share transistor circuits",
     "main": "server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
