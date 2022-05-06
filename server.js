@@ -84,15 +84,46 @@ app.post('/api/register', async(req, res) => {
         })
     }
 })
+
+function generateToken() {
+    return crypto.randomBytes(32).toString('hex')
+}
 app.post('/api/login', async(req, res) => {
-    r = req.body
+    var r = req.body
     try {
         var row = db.prepare('SELECT * FROM Users WHERE username = ?').get(r.username)
     } catch (e) {
         console.log(e)
     }
-    if (row == undefined) return res.redirect('/login')
-    if (await verify(r.password, row.password)) return res.redirect('/')
-    else return res.redirect('/login')
+    if (row == undefined) return res.json({
+        success: false,
+        error: "user not found"
+    })
+    if (await verify(r.password, row.password)) {
+        token = generateToken();
+        try {
+            var row = db.prepare(`UPDATE Users SET token = ? WHERE username = ?`).run(token, r.username)
+        } catch (e) {
+            console.log(e)
+        }
+        return res.json({
+            success: true,
+            data: { token: token }
+        })
+    } else return res.json({
+        success: false,
+        error: "wrong password"
+    })
+})
+
+app.post('/api/getUser', (req, res) => {
+    var token = req.body
+    console.log(token)
+    try {
+        var row = db.prepare('SELECT * FROM Users WHERE token = ?').get(token)
+    } catch (e) {
+        console.log(e)
+    }
+    console.log(row)
 })
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
