@@ -12,6 +12,9 @@ var user_transistors = [
         ['0.1.&.!'], 'NAND'
     ],
     [
+        ['0.1.|.!'], 'NOR'
+    ],
+    [
         ['0.1.|.1.0.&.!.&'], 'XOR'
     ],
     [
@@ -22,6 +25,9 @@ var user_transistors = [
     ],
     [
         ['0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.&.!.&', '1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.&.!.&', '2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.|.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.&.!.&', '3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.|.8.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.&.!.&', '0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.&.4.8.|.8.4.&.!.&.0.&.|', '0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.&.!.&', '0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.&.5.8.|.8.5.&.!.&.1.&.|.0.4.8.|.8.4.&.!.&.|.4.8.|.8.4.&.!.&.0.&.!.&.&.!.&.!.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.&.6.8.|.8.6.&.!.&.2.&.|.1.5.8.|.8.5.&.!.&.|.5.8.|.8.5.&.!.&.1.&.!.&.&.!.&.!.&.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.|.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.&.7.8.|.8.7.&.!.&.3.&.|.2.6.8.|.8.6.&.!.&.|.6.8.|.8.6.&.!.&.2.&.!.&.&.!.&.!.&.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.8.|.8.3.7.8.|.8.7.&.!.&.|.7.8.|.8.7.&.!.&.3.&.!.&.&.!.&.!.&'], 'ALU'
+    ],
+    [
+        ["R0.0.|.!.1.|.!"], 'TLASH'
     ]
 ]
 var transistors_nb = 0
@@ -33,19 +39,42 @@ function init_userTransistors() {
     // permet d'écrire les transistors de l'utilisateur dynamiquement
     document.getElementById("transistors_block").innerHTML = ""
     for (let i = 0; i < user_transistors.length; i++) {
-        document.getElementById("transistors_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(user_transistors[i][0])}, "${user_transistors[i][1]}")'>${user_transistors[i][1]}</button>`
+        var rec = getRecNb(user_transistors[i][0])
+        document.getElementById("transistors_block").innerHTML += `<button class="px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick='add_transistor(${JSON.stringify(user_transistors[i][0])}, "${user_transistors[i][1]}", "${rec}")'>${user_transistors[i][1]}</button>`
     }
 }
 init_userTransistors()
 
-function add_transistor(outputsActions, name) {
+function getRecNb(outputs) {
+    var rec = -1
+    outputs.forEach(path => {
+        path = path.split(".")
+        for (let o = 0; o < path.length; o++) {
+            if (path[o].includes("R")) {
+                var recNb = parseInt(path[o].substring(1))
+                rec = Math.max(rec, recNb)
+            }
+        }
+    })
+    return rec + 1
+}
+
+function add_transistor(outputsActions, name, rec = 0) {
     /**
      ajoute un transistor (lorsqu'on clique en bas)
      */
     var inputNb = 0
     for (let i = 0; i < outputsActions.length; i++) {
-        var n = Math.max.apply(null, outputsActions[i].replaceAll("&", "").replaceAll("!", "").replaceAll("|", "").split('.'));
-        if (n > inputNb) inputNb = n
+
+        var no = outputsActions[i].replaceAll("&", "").replaceAll("!", "").replaceAll("|", "").split('.');
+        for (let o = 0; o < no.length; o++) {
+            if (no[o].includes('R')) {
+                no.splice(o, 1)
+                o--
+            }
+        }
+        var n = Math.max.apply(null, no)
+        inputNb = Math.max(n, inputNb)
     }
     inputNb++
     var h = Math.max(inputNb, outputsActions.length)
@@ -60,7 +89,8 @@ function add_transistor(outputsActions, name) {
         ondblclick: "delete_transistor(this)",
         draggable: true,
         class: "rounded z-30 absolute top-1/2 left-1/2 inline px-4 transition-opacity transition-transform duration-200 scale-90 opacity-0",
-        style: `background-color:${stringToColor(name)};height: ${h*2}rem`
+        style: `background-color:${stringToColor(name)};height: ${h*2}rem`,
+        rec: `${JSON.stringify(new Array(rec).fill('0'))}`
     }
 
     for (const [attr, attrValue] of Object.entries(elemAttrs)) {
@@ -190,7 +220,7 @@ function create_block() {
 
     user_transistors.push([outputsActions, block_name])
     init_userTransistors()
-    add_transistor(outputsActions, block_name)
+    add_transistor(outputsActions, block_name, getRecNb(outputsActions))
 }
 
 //-------------------------------------------------------------------------------------
@@ -279,7 +309,7 @@ function element_drag_ghost(event) {
 
 function drop(event) {
     var dm = document.getElementById(element_dragged)
-    
+
     if (event.clientX != 0 || event.clientY != 0) {
         dm.style.left = event.clientX - 60 + 'px'
         dm.style.top = event.clientY - 30 + 'px'
