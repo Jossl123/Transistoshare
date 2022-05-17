@@ -15,6 +15,10 @@ function login() {
             if (response.ok) return response.json()
             else throw JSON.stringify(response)
         }).then(data => { //request work
+            if (data.success == false) {
+                return alert(data.error)
+            }
+            console.log(data)
             setCookie("token", data.data.token, 7)
             window.location.href = '/'
         })
