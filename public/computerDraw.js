@@ -88,7 +88,7 @@ function add_transistor(outputsActions, name, rec = 0) {
         ondragstart: "element_drag_ghost(event)",
         ondblclick: "delete_transistor(this)",
         draggable: true,
-        class: "rounded z-30 absolute top-1/2 left-1/2 inline px-4 transition-opacity transition-transform duration-200 scale-90 opacity-0",
+        class: "rounded z-30 absolute top-1/2 left-1/2 inline px-4 transition duration-200 scale-90 opacity-0",
         style: `background-color:${stringToColor(name)};height: ${h*2}rem`,
         rec: `${JSON.stringify(new Array(rec).fill('0'))}`
     }
@@ -117,15 +117,22 @@ function delete_transistor(el) {
     /**
      efface un transistor
      */
-    var id = el.id
-    for (let i = 0; i < links.length; i++) {
-        if (links[i][0].split('_')[0] == id || links[i][1].split('_')[0] == id) {
-            links.splice(i, 1)
-            i--
-        }
-    }
-    el.remove();
-    update_joint()
+
+    el.classList.add('scale-90', 'opacity-0')
+
+    requestAnimationFrame(() =>
+        setTimeout(() => {
+            var id = el.id
+            for (let i = 0; i < links.length; i++) {
+                if (links[i][0].split('_')[0] == id || links[i][1].split('_')[0] == id) {
+                    links.splice(i, 1)
+                    i--
+                }
+            }
+            el.remove();
+            update_joint()
+        }, 75)
+    )
 }
 
 function add_input_point() {
