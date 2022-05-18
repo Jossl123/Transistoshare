@@ -44,6 +44,13 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.sendFile(__dirname + '/views/register.html');
 });
+app.get('/account', (req, res) => {
+    res.sendFile(__dirname + '/views/account.html');
+})
+
+function generateToken() {
+    return crypto.randomBytes(32).toString('hex')
+}
 app.post('/api/register', async(req, res) => {
     r = req.body
     if (r.username.length < 3) return res.json({ success: false, error: "username invalid" })
@@ -85,9 +92,6 @@ app.post('/api/register', async(req, res) => {
     }
 })
 
-function generateToken() {
-    return crypto.randomBytes(32).toString('hex')
-}
 app.post('/api/login', async(req, res) => {
     var r = req.body
     try {
@@ -142,9 +146,12 @@ app.post('/api/getUser', (req, res) => {
             error: "wrong token"
         })
     } else {
+        try {
+            var transistors = db.prepare('SELECT name, path FROM Transistors WHERE property = ?').all(row.username)
+        } catch (e) { console.log(e) }
         return res.json({
             success: true,
-            data: row
+            data: Object.assign({}, row, { "transistors": transistors })
         })
     }
 })
