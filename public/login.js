@@ -18,7 +18,6 @@ function login() {
             if (data.success == false) {
                 return alert(data.error)
             }
-            console.log(data)
             setCookie("token", data.data.token, 7)
             window.location.href = '/'
         })

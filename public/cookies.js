@@ -18,3 +18,7 @@ function getCookie(name) {
     }
     return null;
 }
+
+function removeCookie(name) {
+    document.cookie = name + '=; Max-Age=0'
+}

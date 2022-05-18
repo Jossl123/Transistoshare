@@ -116,14 +116,36 @@ app.post('/api/login', async(req, res) => {
     })
 })
 
+app.post('/api/logout', (req, res) => {
+    var token = req.body.token
+    try {
+        var row = db.prepare('UPDATE Users SET token = NULL WHERE token = ?').run(token)
+    } catch (e) {
+        console.log(e)
+    }
+    return res.json({
+        success: true,
+        error: "loged out"
+    })
+})
+
 app.post('/api/getUser', (req, res) => {
-    var token = req.body
-    console.log(token)
+    var token = req.body.token
     try {
         var row = db.prepare('SELECT * FROM Users WHERE token = ?').get(token)
     } catch (e) {
         console.log(e)
     }
-    console.log(row)
+    if (row == undefined) {
+        return res.json({
+            success: false,
+            error: "wrong token"
+        })
+    } else {
+        return res.json({
+            success: true,
+            data: row
+        })
+    }
 })
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));
