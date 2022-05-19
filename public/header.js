@@ -16,9 +16,11 @@ window.onload = function() {
         }).then(data => { //request work
             if (!data.success) return removeCookie("token")
             userData = data.data
+            console.log(userData.transistors)
             for (let i = 0; i < userData.transistors.length; i++) {
-                userData.transistors[i].path = JSON.parse(userData.transistors[i].path)
+                userData.transistors[i].path = userData.transistors[i].path.split("/")
             }
+            console.log(userData.transistors)
             document.getElementById("header-right").innerHTML = `
             <li class="mr-3">
                 <a class="inline-block text-gray-800 no-underline py-2 px-4 bg-white rounded transition transform hover:scale-105" href="/account">${userData.username}</a>

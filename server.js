@@ -51,6 +51,38 @@ app.get('/account', (req, res) => {
 function generateToken() {
     return crypto.randomBytes(32).toString('hex')
 }
+app.get('/api/getFeed', async(req, res) => {
+    try {
+        var row = db.prepare(`SELECT * FROM Transistors WHERE public = 1`).all()
+    } catch (e) {
+        console.log(e)
+        return res.json({
+            success: false,
+            error: e
+        })
+    }
+    return res.json({
+        success: true,
+        data: row
+    })
+})
+app.post('/api/saveTransistor', (req, res) => {
+    var r = req.body
+    r.path = r.path.join("/")
+    try {
+        var row = db.prepare(`INSERT INTO Transistors (property, name, path, public, description) VALUES (?, ?, ?, ?, ?)`).run(r.username, r.name, r.path, r.public, r.description)
+    } catch (e) {
+        console.log(e)
+        return res.json({
+            success: false,
+            error: e
+        })
+    }
+    return res.json({
+        success: true,
+        data: "saved"
+    })
+})
 app.post('/api/register', async(req, res) => {
     r = req.body
     if (r.username.length < 3) return res.json({ success: false, error: "username invalid" })
