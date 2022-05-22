@@ -39,13 +39,13 @@ function executeById(id) {
             default:
                 switch (action[i][0]) {
                     case "R":
-                        var v = JSON.parse(document.getElementById(parent).getAttribute("rem"))[action[i].slice(1)]
+                        var v = JSON.parse(document.getElementById(id).getAttribute("rem"))[action[i].slice(1)]
                         l.push(v)
                         break;
                     case "r":
-                        var rem = JSON.parse(document.getElementById(parent).getAttribute("rem"))
+                        var rem = JSON.parse(document.getElementById(id).getAttribute("rem"))
                         rem[action[i].slice(1)] = Number(l[l.length - 1]);
-                        document.getElementById(parent).setAttribute("rem", JSON.stringify(rem))
+                        document.getElementById(id).setAttribute("rem", JSON.stringify(rem))
                         break;
                     default:
                         l.push(parseInt(inputs[parseInt(action[i])]))
@@ -123,6 +123,11 @@ function trace_path(output, cross_outputs = [], itt = 0, rem_outputs = []) {
     path.push("k" + linked_elem)
     if (itt == 0) {
         var rem = 0
+        for (let i = 0; i < path.length; i++) {
+            if (path[i][0] == "R" && !path[i].slice(1).includes("_")) {
+                rem = Math.max(rem, parseInt(path[i].slice(1)))
+            }
+        }
         for (let i = 0; i < path.length; i++) {
             if (path[i][0] == "k") {
                 if (!rem_outputs.includes(path[i].slice(1))) {

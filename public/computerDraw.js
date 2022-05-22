@@ -35,8 +35,8 @@ var user_transistors = [{
         name: 'ALU'
     },
     {
-        path: ["R0.0.|.!.1.|.!.r0"],
-        name: 'TLASH'
+        path: ["0.1.&.!.R0.1.0.0.&.!.&.!.&.!.&.!.r0"],
+        name: 'DataLatch'
     }
 ]
 var transistors_nb = 0
@@ -55,20 +55,23 @@ function init_userTransistors() {
 init_userTransistors()
 
 function getRecNb(outputs) {
-    var rec = -1
+    var rec = []
+    var i = 0
     outputs.forEach(path => {
+        rec.push(0)
         path = path.split(".")
         for (let o = 0; o < path.length; o++) {
             if (path[o].includes("R")) {
-                var recNb = parseInt(path[o].substring(1))
-                rec = Math.max(rec, recNb)
+                var recNb = parseInt(path[o].substring(1)) + 1
+                rec[i] = Math.max(rec[i], recNb)
             }
         }
+        i++
     })
-    return rec + 1
+    return rec
 }
 
-function add_transistor(outputsActions, name, rec = 0) {
+function add_transistor(outputsActions, name, rec = []) {
     /**
      ajoute un transistor (lorsqu'on clique en bas)
      */
@@ -98,8 +101,7 @@ function add_transistor(outputsActions, name, rec = 0) {
         ondblclick: "delete_transistor(this)",
         draggable: true,
         class: "rounded z-30 absolute top-1/2 left-1/2 inline px-4 transition duration-200 scale-90 opacity-0",
-        style: `background-color:${stringToColor(name)};height: ${h*2}rem`,
-        rem: `${JSON.stringify(new Array(rec).fill(0))}`
+        style: `background-color:${stringToColor(name)};height: ${h*2}rem`
     }
 
     for (const [attr, attrValue] of Object.entries(elemAttrs)) {
@@ -107,7 +109,7 @@ function add_transistor(outputsActions, name, rec = 0) {
     }
 
     for (let i = 0; i < inputNb; i++) newElem.innerHTML += `<div id="${transistors_nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
-    for (let i = 0; i < outputsActions.length; i++) newElem.innerHTML += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
+    for (let i = 0; i < outputsActions.length; i++) newElem.innerHTML += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem" rem="${JSON.stringify(new Array(rec[i]).fill(0))}"></div>`
     newElem.innerHTML += `<p class="text-white mix-blend-luminosity">${name}</p>`
 
     document.getElementById("content").appendChild(newElem)
