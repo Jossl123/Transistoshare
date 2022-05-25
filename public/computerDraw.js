@@ -231,6 +231,11 @@ function create_block() {
     /**
      permet de construire un nouveau transistor a partir du circuit actuel de l'utilisateur
      */
+    var block_name = document.getElementById("transistor_name").value
+    if (block_name.trim() == "" || block_name == "Transistor name") {
+        document.getElementById("transistor_name").classList.add("border-red-500")
+        return
+    }
     var outputsActions = []
     var outputsConnectedId = []
     for (let i = 0; i < links.length; i++) {
@@ -242,15 +247,23 @@ function create_block() {
     for (let i = 0; i < outputsConnectedId.length; i++) {
         outputsActions.push(trace_path(`O_${outputsConnectedId[i]}`))
     }
-
-    var block_name = ""
-    while (block_name.trim() == "") {
-        block_name = prompt("Name of the block")
+    if (outputsActions.length == 0){
+        document.getElementById("create_popup").classList.add("hidden")
+        return alert("no path")
     }
-
+    if (document.getElementById("save").value == 'on') {
+        saveTransistor(block_name, outputsActions, document.getElementById('transistor_description').value)
+    }
     user_transistors.push({ "path": outputsActions, "name": block_name })
     init_userTransistors()
     add_transistor(outputsActions, block_name, getRecNb(outputsActions))
+    document.getElementById("create_popup").classList.add("hidden")
+}
+function show_create(){
+    document.getElementById("create_popup").classList.remove("hidden")
+}
+function close_create(){
+    document.getElementById("create_popup").classList.add("hidden")
 }
 
 //-------------------------------------------------------------------------------------

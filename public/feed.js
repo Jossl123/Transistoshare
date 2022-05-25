@@ -40,11 +40,15 @@ function showFeed(feed) {
     }
 }
 
-function addToYours(i) {
+async function addToYours(i) {
     if (!userData) return alert("pas connecté")
     var t = feed[i]
-    saveTransistor(t.name, t.path.split("/"), t.description).then(e => {
-        alert("saved !")
+    await saveTransistor(t.name, t.path.split("/"), t.description).then(e => {
+        if (!e.success) {
+            console.log(e)
+        }else{
+            alert('saved')
+        }
     })
 }
 showFeed()

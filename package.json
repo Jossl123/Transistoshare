@@ -19,7 +19,8 @@
     "homepage": "https://github.com/Jossl123/Transistoshare#readme",
     "dependencies": {
         "better-sqlite3": "^7.5.1",
-        "express": "^4.18.0"
+        "express": "^4.18.0",
+        "tailwindcss": "^3.0.24"
     },
     "devDependencies": {
         "eslint": "^8.12.0"

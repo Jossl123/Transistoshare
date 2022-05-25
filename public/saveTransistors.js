@@ -1,4 +1,5 @@
-function saveTransistor(name = "DEFAULT", path = [], description = "") {
+async function saveTransistor(name = "DEFAULT", path = [], description = "") {
+    var res = false
     fetch('/api/saveTransistor', {
             method: 'POST',
             headers: {
@@ -17,10 +18,11 @@ function saveTransistor(name = "DEFAULT", path = [], description = "") {
             else throw JSON.stringify(response)
         }).then(data => { //request work
             console.log(data)
+            res = data
         })
         .catch(e => { //request error
-            console.error(e)
+            res = e
         })
-    return false
+    console.log(res)
+    return res
 }
-console.log(userData, "test")
