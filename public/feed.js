@@ -23,7 +23,6 @@ async function getFeed(name = "DEFAULT", path = [], description = "") {
 getFeed()
 
 function showFeed(feed) {
-    console.log(feed)
     if (!feed) return
     for (let i = 0; i < feed.length; i++) {
         document.getElementById("content").innerHTML += `
@@ -44,6 +43,8 @@ function showFeed(feed) {
 function addToYours(i) {
     if (!userData) return alert("pas connecté")
     var t = feed[i]
-    saveTransistor(t.name, t.path.split("/"), t.description)
+    saveTransistor(t.name, t.path.split("/"), t.description).then(e => {
+        alert("saved !")
+    })
 }
 showFeed()

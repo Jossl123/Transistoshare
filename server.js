@@ -139,12 +139,13 @@ app.post('/api/login', async(req, res) => {
         token = generateToken();
         try {
             var row = db.prepare(`UPDATE Users SET token = ? WHERE username = ?`).run(token, r.username)
-        } catch (e) {
-            console.log(e)
-        }
+        } catch (e) { console.log(e) }
+        try {
+            var transistors = db.prepare('SELECT * FROM Transistors WHERE property = ?').all(r.username)
+        } catch (e) { console.log(e) }
         return res.json({
             success: true,
-            data: { token: token }
+            data: { userData: { transistors: transistors, username: r.username }, token: token }
         })
     } else return res.json({
         success: false,
@@ -179,7 +180,7 @@ app.post('/api/getUser', (req, res) => {
         })
     } else {
         try {
-            var transistors = db.prepare('SELECT name, path FROM Transistors WHERE property = ?').all(row.username)
+            var transistors = db.prepare('SELECT * FROM Transistors WHERE property = ?').all(row.username)
         } catch (e) { console.log(e) }
         return res.json({
             success: true,
@@ -187,4 +188,5 @@ app.post('/api/getUser', (req, res) => {
         })
     }
 })
+
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`));

@@ -19,6 +19,7 @@ function login() {
                 return alert(data.error)
             }
             setCookie("token", data.data.token, 7)
+            setCookie("userData", JSON.stringify(data.data.userData), 7)
             window.location.href = '/'
         })
         .catch(e => { //request error

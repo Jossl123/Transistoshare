@@ -18,7 +18,8 @@ function verifyForm() {
                 if (response.ok) return response.json()
                 else throw JSON.stringify(response)
             }).then(data => { //request work
-                console.log(data)
+                if (!data.success) console.log(data.error)
+                window.location.href = '/login'
             })
             .catch(e => { //request error
                 console.error(e)
