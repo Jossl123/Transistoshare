@@ -28,7 +28,6 @@ function execute(inputs, action) {
         inputs : tableaux des valeurs des inputs
         action : chaine de caractère représentant le circuit
     */
-    if (action.includes("R")) return 0 // can't evalue if there are some recursive transistor
     var l = []
     action = action.split(".")
     for (let i = 0; i < action.length; i++) {
@@ -55,7 +54,7 @@ function execute(inputs, action) {
     return `${Number(l.pop())}`
 }
 
-function trace_path(output, cross_outputs = [], rem = 0) {
+function trace_path(output) {
     /**
      retourne le circuit actuel, se terminant par output, en chaine de caractere sous la notation polonaise inversée
      output : id du transistor à parcourir
@@ -68,15 +67,11 @@ function trace_path(output, cross_outputs = [], rem = 0) {
             i = links.length
         }
     }
-    if (cross_outputs.includes(linked_elem)) {
-        rem += 1
-        return `R${rem-1}`
-    }
     var path = document.getElementById(linked_elem).getAttribute("action").split('.') //notation du transistor de l'input
     if (linked_elem[0] != "I") { //si ça n'est pas un input
         var inputsOfElement = document.querySelectorAll(`[id^="${linked_elem.split('_')[0]}_i"]`)
         for (let i = 0; i < inputsOfElement.length; i++) {
-            var new_path = convertToN(trace_path(inputsOfElement[i].id, cross_outputs + [linked_elem], rem))
+            var new_path = convertToN(trace_path(inputsOfElement[i].id))
             for (let n = 0; n < path.length; n++) {
                 if (path[n] == `${i}`) {
                     path.splice(n, 1, ...new_path)
@@ -86,7 +81,6 @@ function trace_path(output, cross_outputs = [], rem = 0) {
         }
         path = unconvertToN(path)
     }
-    console.log(path.join("."))
     return path.join(".")
 }
 

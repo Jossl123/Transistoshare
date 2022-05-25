@@ -67,20 +67,23 @@ function init_userTransistors() {
 init_userTransistors()
 
 function getRecNb(outputs) {
-    var rec = -1
+    var rec = []
+    var i = 0
     outputs.forEach(path => {
+        rec.push(0)
         path = path.split(".")
         for (let o = 0; o < path.length; o++) {
             if (path[o].includes("R")) {
-                var recNb = parseInt(path[o].substring(1))
-                rec = Math.max(rec, recNb)
+                var recNb = parseInt(path[o].substring(1)) + 1
+                rec[i] = Math.max(rec[i], recNb)
             }
         }
+        i++
     })
-    return rec + 1
+    return rec
 }
 
-function add_transistor(outputsActions, name, rec = 0) {
+function add_transistor(outputsActions, name, rec = []) {
     /**
      ajoute un transistor (lorsqu'on clique en bas)
      */
@@ -89,7 +92,7 @@ function add_transistor(outputsActions, name, rec = 0) {
 
         var no = outputsActions[i].replaceAll("&", "").replaceAll("!", "").replaceAll("|", "").split('.');
         for (let o = 0; o < no.length; o++) {
-            if (no[o].includes('R')) {
+            if (no[o].includes('R') || no[o].includes('r')) {
                 no.splice(o, 1)
                 o--
             }
@@ -110,8 +113,7 @@ function add_transistor(outputsActions, name, rec = 0) {
         ondblclick: "delete_transistor(this)",
         draggable: true,
         class: "rounded z-30 absolute top-1/2 left-1/2 inline px-4 transition duration-200 scale-90 opacity-0",
-        style: `background-color:${stringToColor(name)};height: ${h*2}rem`,
-        rec: `${JSON.stringify(new Array(rec).fill('0'))}`
+        style: `background-color:${stringToColor(name)};height: ${h*2}rem`
     }
 
     for (const [attr, attrValue] of Object.entries(elemAttrs)) {
@@ -119,7 +121,7 @@ function add_transistor(outputsActions, name, rec = 0) {
     }
 
     for (let i = 0; i < inputNb; i++) newElem.innerHTML += `<div id="${transistors_nb}_i_${i}" type="i" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -left-3" style="top: ${i*2+0.25}rem"></div>`
-    for (let i = 0; i < outputsActions.length; i++) newElem.innerHTML += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem"></div>`
+    for (let i = 0; i < outputsActions.length; i++) newElem.innerHTML += `<div id="${transistors_nb}_o_${i}" action="${outputsActions[i]}" type="o" value="0" onclick="create_link(event)" class="absolute bg-white rounded-full h-6 w-6 -right-3" style="top: ${i*2+0.25}rem" rem="${JSON.stringify(new Array(rec[i]).fill(0))}"></div>`
     newElem.innerHTML += `<p class="text-white mix-blend-luminosity">${name}</p>`
 
     document.getElementById("content").appendChild(newElem)
@@ -261,6 +263,11 @@ function create_link(e) {
      */
     if (linking) { //si on a deja selectionné un point
         try {
+            for (let i = 0; i < links.length; i++) {
+                if (links[i][1] == point_to_link || links[i][1] == e.path[0].id) {
+                    throw "Already connected"
+                }
+            }
             if (e.path[0].getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
                 var pos1 = document.getElementById(point_to_link).getBoundingClientRect()
                 var pos2 = e.path[0].getBoundingClientRect()
@@ -282,7 +289,6 @@ function create_link(e) {
             point_to_link = 0
             document.body.style.cursor = "pointer"
         }
-
     } else {
         document.body.style.cursor = "crosshair"
         point_to_link = e.path[0].getAttribute("id")
