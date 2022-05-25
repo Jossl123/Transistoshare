@@ -66,6 +66,23 @@ app.get('/api/getFeed', async(req, res) => {
         data: row
     })
 })
+app.post('/api/modifyTransistor', (req, res) => {
+    var r = req.body
+    console.log(r.transistor)
+    try {
+        var row = db.prepare(`UPDATE Transistors SET public = ? WHERE property = ? AND name = ?`).run(parseInt(r.public), r.property, r.name)
+    } catch (e) {
+        console.log(e)
+        return res.json({
+            success: false,
+            error: e
+        })
+    }
+    return res.json({
+        success: true,
+        data: "saved"
+    })
+})
 app.post('/api/saveTransistor', (req, res) => {
     var r = req.body
     r.path = r.path.join("/")
