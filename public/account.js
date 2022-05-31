@@ -37,4 +37,5 @@ function publicity(i) {
             alert("Unpublished")
         }
     }
+    setCookie("userData", JSON.stringify(userData), 7)
 }

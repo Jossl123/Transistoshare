@@ -67,8 +67,7 @@ app.get('/api/getFeed', async(req, res) => {
     })
 })
 app.post('/api/modifyTransistor', (req, res) => {
-    var r = req.body
-    console.log(r.transistor)
+    var r = req.body.transistor
     try {
         var row = db.prepare(`UPDATE Transistors SET public = ? WHERE property = ? AND name = ?`).run(parseInt(r.public), r.property, r.name)
     } catch (e) {
