@@ -23,7 +23,6 @@ async function saveTransistor(name = "DEFAULT", path = [], description = "") {
         .catch(e => { //request error
             res = e
         })
-    console.log(res)
     return res
 }
 

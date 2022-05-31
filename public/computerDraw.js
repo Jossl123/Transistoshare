@@ -247,7 +247,7 @@ function create_block() {
     for (let i = 0; i < outputsConnectedId.length; i++) {
         outputsActions.push(trace_path(`O_${outputsConnectedId[i]}`))
     }
-    if (outputsActions.length == 0){
+    if (outputsActions.length == 0) {
         document.getElementById("create_popup").classList.add("hidden")
         return alert("no path")
     }
@@ -258,11 +258,15 @@ function create_block() {
     init_userTransistors()
     add_transistor(outputsActions, block_name, getRecNb(outputsActions))
     document.getElementById("create_popup").classList.add("hidden")
+    userData.transistors = user_transistors
+    setCookie("userData", JSON.stringify(userData), 7)
 }
-function show_create(){
+
+function show_create() {
     document.getElementById("create_popup").classList.remove("hidden")
 }
-function close_create(){
+
+function close_create() {
     document.getElementById("create_popup").classList.add("hidden")
 }
 
