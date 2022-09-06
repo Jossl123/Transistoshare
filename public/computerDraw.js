@@ -251,15 +251,17 @@ function create_block() {
         document.getElementById("create_popup").classList.add("hidden")
         return alert("no path")
     }
-    if (document.getElementById("save").value == 'on') {
+    if (document.getElementById("save") && document.getElementById("save").value == 'on') {
         saveTransistor(block_name, outputsActions, document.getElementById('transistor_description').value)
     }
     user_transistors.push({ "path": outputsActions, "name": block_name })
     init_userTransistors()
     add_transistor(outputsActions, block_name, getRecNb(outputsActions))
     document.getElementById("create_popup").classList.add("hidden")
-    userData.transistors = user_transistors
-    setCookie("userData", JSON.stringify(userData), 7)
+    if (userData) {
+        userData.transistors = user_transistors
+        setCookie("userData", JSON.stringify(userData), 7)
+    }
 }
 
 function show_create() {

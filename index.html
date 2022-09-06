@@ -29,10 +29,26 @@
             Utilisation
         </button>
 
-        <button class="flex items-center gap-1 px-2 py-1 rounded transition hover:bg-white/25 text-white" onclick="create_block()">
+        <button onclick="show_create()" class="flex items-center gap-1 px-2 py-1 rounded transition hover:bg-white/25 text-white" type="button" data-modal-toggle="popup-modal">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            CREATE
+            Create
         </button>
+        <div id="create_popup" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full">
+            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                <div class="relative bg-white rounded-lg shadow p-2 dark:bg-gray-700">
+                    <div class="p-6 text-center">
+                        <div class="flex m-2">
+                            <input type="text" id="transistor_name" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                id="exampleText0" placeholder="Transistor name" />
+                        </div>
+                        <button onclick="create_block()" data-modal-toggle="popup-modal" type="button" class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                            Create
+                        </button>
+                        <button onclick="close_create()" data-modal-toggle="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="h-full w-0.5 bg-white/25"></div>
         <div id="transistors_block"></div>
     </div>
