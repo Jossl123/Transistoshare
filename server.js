@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-var db = require('better-sqlite3')('Transistoshare.db')
+var db = require('better-sqlite3')('./Transistoshare/Transistoshare.db')
 const crypto = require("crypto")
 
 function hash(password) {
@@ -69,7 +69,11 @@ app.get('/api/getFeed', async(req, res) => {
 app.post('/api/modifyTransistor', (req, res) => {
     var r = req.body.transistor
     try {
-        var row = db.prepare(`UPDATE Transistors SET public = ? WHERE property = ? AND name = ?`).run(parseInt(r.public), r.property, r.name)
+        if (r.property == r.creator) {
+            var row = db.prepare(`UPDATE Transistors SET public = ? WHERE property = ? AND name = ?`).run(parseInt(r.public), r.property, r.name)
+        } else {
+            throw "not your transistor"
+        }
     } catch (e) {
         console.log(e)
         return res.json({
@@ -82,11 +86,56 @@ app.post('/api/modifyTransistor', (req, res) => {
         data: "saved"
     })
 })
+
+app.post('/api/likeTransistor', (req, res) => {
+    var r = req.body
+        // try {
+        //     var row = db.prepare(`UPDATE INTO Transistors (property, name, path, public, description, creator) VALUES (?, ?, ?, ?, ?, ?)`).run(r.username, r.name, r.path, r.public, r.description, r.username)
+        // } catch (e) {
+        //     console.log(e)
+        //     return res.json({
+        //         success: false,
+        //         error: e
+        //     })
+        // }
+    return res.json({
+        success: false,
+        data: ""
+    })
+})
+
 app.post('/api/saveTransistor', (req, res) => {
     var r = req.body
     r.path = r.path.join("/")
     try {
-        var row = db.prepare(`INSERT INTO Transistors (property, name, path, public, description) VALUES (?, ?, ?, ?, ?)`).run(r.username, r.name, r.path, r.public, r.description)
+        var row = db.prepare(`INSERT INTO Transistors (property, name, path, public, description, creator) VALUES (?, ?, ?, ?, ?, ?)`).run(r.username, r.name, r.path, r.public, r.description, r.username)
+    } catch (e) {
+        console.log(e)
+        return res.json({
+            success: false,
+            error: e
+        })
+    }
+    return res.json({
+        success: true,
+        data: "saved"
+    })
+})
+app.post('/api/stealTransistor', (req, res) => {
+    var r = req.body
+    r.path = r.path.join("/")
+        //check if the transistor exist
+    try {
+        var row = db.prepare(`SELECT * FROM Transistors WHERE property = \'${r.creator}\' AND name = \'${r.name}\' AND path = \'${r.path}\'`).get()
+    } catch (e) {
+        console.log(e)
+        return res.json({
+            success: false,
+            error: e
+        })
+    }
+    try {
+        var row = db.prepare(`INSERT INTO Transistors (property, name, path, public, description, creator) VALUES (?, ?, ?, ?, ?, ?)`).run(r.username, r.name, r.path, 0, r.description, r.creator)
     } catch (e) {
         console.log(e)
         return res.json({
@@ -200,7 +249,7 @@ app.post('/api/getUser', (req, res) => {
         } catch (e) { console.log(e) }
         return res.json({
             success: true,
-            data: Object.assign({}, row, { "transistors": transistors })
+            data: { userData: { "transistors": transistors, "username": row.username }, "token": row.token }
         })
     }
 })

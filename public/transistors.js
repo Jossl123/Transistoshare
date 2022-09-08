@@ -41,7 +41,6 @@ async function modifyTransistor(transistor) {
             if (response.ok) return response.json()
             else throw JSON.stringify(response)
         }).then(data => { //request work
-            console.log(data)
             res = data
         })
         .catch(e => { //request error
