@@ -352,7 +352,7 @@ window.addEventListener("resize", update_joint) // actualise les fils quand la f
 //-------------------------------------------------------------------------------------
 
 function element_drag(event) {
-    element_dragged = event.path[0].id
+    element_dragged = event.target.id
 
     drop(event)
 }
