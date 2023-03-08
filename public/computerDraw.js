@@ -284,19 +284,19 @@ function create_link(e) {
     if (linking) { //si on a deja selectionné un point
         try {
             for (let i = 0; i < links.length; i++) {
-                if (links[i][1] == point_to_link || links[i][1] == e.path[0].id) {
+                if (links[i][1] == point_to_link || links[i][1] == e.target.id) {
                     throw "Already connected"
                 }
             }
-            if (e.path[0].getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
+            if (e.target.getAttribute("type") != document.getElementById(point_to_link).getAttribute("type")) { //si le point cliqué n'est pas du même type que le premier point cliqué (intput / output)
                 var pos1 = document.getElementById(point_to_link).getBoundingClientRect()
-                var pos2 = e.path[0].getBoundingClientRect()
+                var pos2 = e.target.getBoundingClientRect()
                 if (document.getElementById(point_to_link).getAttribute("type") == "o") { //si le premier point était un output
-                    links.push([point_to_link, e.path[0].id])
-                    document.getElementById("svg_joint").innerHTML += `<line id="line-${point_to_link}-${e.path[0].id}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+                    links.push([point_to_link, e.target.id])
+                    document.getElementById("svg_joint").innerHTML += `<line id="line-${point_to_link}-${e.target.id}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
                 } else { //si le premier point était un input
-                    links.push([e.path[0].id, point_to_link])
-                    document.getElementById("svg_joint").innerHTML += `<line id="line-${e.path[0].id}-${point_to_link}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
+                    links.push([e.target.id, point_to_link])
+                    document.getElementById("svg_joint").innerHTML += `<line id="line-${e.target.id}-${point_to_link}" onclick="delete_joint(event)" class="z-30" value="0" id="j" x1="${pos1.left}" y1="${pos1.top}" x2="${pos2.left}" y2="${pos2.top}" style="stroke:rgb(255, 255, 255);stroke-width:4" />`
                 }
                 linking = false
                 link_nb++
@@ -311,7 +311,7 @@ function create_link(e) {
         }
     } else {
         document.body.style.cursor = "crosshair"
-        point_to_link = e.path[0].getAttribute("id")
+        point_to_link = e.target.getAttribute("id")
         linking = true
     }
     update()
@@ -334,7 +334,7 @@ function delete_joint(e) {
     /**
      supprime un fil
      */
-    var idsep = e.path[0].id.split('-')
+    var idsep = e.target.id.split('-')
     for (let i = 0; i < links.length; i++) {
         if (JSON.stringify(links[i]) == JSON.stringify([idsep[1], idsep[2]])) {
             links.splice(i, 1)
